@@ -1,0 +1,150 @@
+/*******************************************************************************
+                                MAIN GRID
+                        3 Columns: Border|Content|Border
+                        4 Rows: LOGO-BAR-INFO-FOOTER
+*******************************************************************************/
+
+.grid {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 8fr 1fr;
+    grid-template-rows: 150px 100px auto 100px;
+    grid-gap: 20px;
+}
+
+/*******************************************************************************
+                                LOGO          
+*******************************************************************************/
+
+.logo {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 20px;
+}
+
+.logo h2 {
+    font: 24px logo, sans-serif;
+}
+
+/*******************************************************************************
+                                BREADCRUMB    
+                    https://css-tricks.com/triangle-breadcrumbs/      
+*******************************************************************************/
+
+.arrows {
+    white-space: nowrap;
+    padding: 0px;
+}
+
+.arrows li {
+    display: inline-block;
+    margin: 0 9px 0 -10px;
+    padding: 0 10px;
+    position: relative;
+    font: 18px block;
+    letter-spacing: -1px;
+    /* color: hsl(0, 0%, 75%); */
+    color: var(--gl-grey);
+    cursor: pointer;
+}
+
+.arrows li a {
+    color: rgb(191, 191, 191);
+}
+
+.arrows li::before,
+.arrows li::after {
+    border-right: 2px solid var(--gl-mutemint);
+    content: '';
+    display: block;
+    height: 50%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: -1;
+    transform: skewX(45deg);
+}
+
+.arrows li::after {
+    bottom: 0;
+    top: auto;
+    transform: skewX(-45deg);
+}
+
+.arrows li:last-of-type::before,
+.arrows li:last-of-type::after {
+    display: none;
+}
+
+.arrows li.current {
+    color: var(--gl-mint);
+}
+
+/*******************************************************************************
+                                BAR          
+*******************************************************************************/
+
+.bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    background: var(--gl-gradient);
+    /* Definition für das innere Grid */
+    display: grid;
+    grid-template-columns: 1fr 8fr 1fr;
+    grid-gap: 20px;
+    align-items: center;
+}
+
+.bar p {
+    font: 18px block;
+    text-align: left;
+    /* padding: 20px; */
+    grid-column: 2;
+}
+
+/*******************************************************************************
+                                FORM          
+*******************************************************************************/
+
+.content {
+    font: 18px block;
+    grid-column: 2;
+    grid-row: 3;
+    border: 2px solid var(--gl-grey);
+    border-radius: 5px;
+    /* padding: 20px; */
+    position: relative;
+}
+
+/* Hide all steps by default: */
+
+.step {
+    display: none;
+}
+
+/* label::after {
+    content: "";
+    display: block;
+} */
+
+.nav-container {
+    position: absolute;
+    bottom: 0;
+    right: 5px;
+}
+
+.next {
+    font: 18px block;
+    padding: 8px;
+    margin: 8px 2px 8px 0px;
+    border: 2px solid var(--gl-mutemint);
+    border-radius: 5px;
+    background-color: white;
+    outline: none;
+}
+
+.next:hover:enabled {
+    background-color: var(--gl-mutemint);
+    border-color: var(--gl-grey);
+}

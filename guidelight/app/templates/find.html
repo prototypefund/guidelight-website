@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='find.css') }}">
+{% endblock %}
+
+{% block header %}
+<a href="/" class="link">
+    <h2>GuideLight</h2>
+</a>
+{% endblock %}
+
+{% block bar %}
+<form class="search">
+    <input type="text" class="form-text" name="query" placeholder="'LKA Hessen', 'Google', 'Stasi' ..." {% if query %}
+        value="{{ query }}" {% endif %}>
+    <input type="submit" class="form-click" value="Find">
+</form>
+{% endblock %}
+
+{% block content %}
+{% for entity in entities %}
+<a href="/entity/{{ entity.short }}" class="link">
+    <div class="box">
+        <div class="circle"></div>
+        <h2 class="headline"> {{ entity.name }}</h2>
+    </div>
+</a>
+{% endfor %}
+{% endblock %}

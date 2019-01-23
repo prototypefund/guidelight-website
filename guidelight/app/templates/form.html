@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='form.css') }}">
+{% endblock %}
+
+{% block header %}
+<a href="/" class="link">
+    <h2>GuideLight</h2>
+</a>
+<ul class="arrows">
+    <li><a class="link" href="/search">Suche</a></li>
+    <li><a class="link" href="/entity/{{entity.short}}">{{entity.name}}</a></li>
+    <!-- <li><a href="/entity/{{entity.short}}/{{content.short}}">{{content.name}}</a></li> -->
+    {% for step in form %}
+    <li class="step">{{step.title}}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
+
+{% block bar %}
+{% for step in form %}
+<p class="step">{% if step.info %}{{step.info}}{% endif %}</p>
+{% endfor %}
+{% endblock %}
+
+{% block content %}
+
+<form action="">
+    {% for step in form %}
+    <div class="step">
+        {% if step.type == "text" %}
+        <p>{{ step.title }}</p>
+        <p>{{ content.content.get(step.key) }}</p>
+
+        {% elif step.type == "inputfield" %}
+        <p>{{ step.title }}</p>
+        <p>{{ content.content.get(step.key) }}</p>
+        <input id="in" placeholder={{step.description}}>
+
+
+        {% elif step.type == "selection" %}
+        <p>{{ step.title }}</p>
+        <p>{{ content.content.get(step.key).0.description }}</p>
+        <fieldset>
+            <legend>Auswahl</legend>
+            {% for o in content.content.get(step.key) %}
+            <input type="checkbox" id="option-{{ loop.index }}" name="1" value="{{o.text}}">
+            <label for="option-{{ loop.index }}">
+                {{o.option}}
+            </label>
+            {% endfor %}
+        </fieldset>
+        {% elif step.type == "multiselection" %}
+        <p>{{ step.title }}</p>
+        <p>{{ content.content.get(step.key).0.description }}</p>
+        <fieldset>
+            <legend>Auswahl</legend>
+            {% for o in content.content.get(step.key) %}
+            <input type="radio" id="option-{{ loop.index }}" name="1" value="{{o.text}}">
+            <label for="option-{{ loop.index }}">
+                {{o.option}}
+            </label>
+            {% endfor %}
+        </fieldset>
+        {% endif %}
+    </div>
+    {% endfor %}
+</form>
+<div class="nav-container">
+    <button type="button" class="next" id="prevBtn">zurück</button>
+    <button type="button" class="next" id="nextBtn">weiter</button>
+</div>
+<script src="{{ url_for('static',filename='form.js') }}"></script>
+{% endblock %}

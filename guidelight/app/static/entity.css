@@ -1,0 +1,166 @@
+/*******************************************************************************
+                                MAIN GRID
+                        3 Columns: Border|Content|Border
+                        4 Rows: LOGO-BAR-INFO-FOOTER
+*******************************************************************************/
+
+.grid {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 8fr 1fr;
+    grid-template-rows: 150px 100px auto 100px;
+    grid-gap: 20px;
+}
+
+/*******************************************************************************
+                                LOGO          
+*******************************************************************************/
+
+.logo {
+    grid-column: 2;
+    grid-row: 1;
+    padding: 20px;
+}
+
+.logo h2 {
+    font: 24px logo, sans-serif;
+}
+
+/*******************************************************************************
+                                BREADCRUMB    
+                    https://css-tricks.com/triangle-breadcrumbs/      
+*******************************************************************************/
+
+.arrows {
+    white-space: nowrap;
+    padding: 0px;
+}
+
+.arrows li {
+    display: inline-block;
+    margin: 0 9px 0 -10px;
+    padding: 0 10px;
+    position: relative;
+}
+
+.arrows li::before,
+.arrows li::after {
+    border-right: 2px solid var(--gl-mint);
+    content: '';
+    display: block;
+    height: 50%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: -1;
+    transform: skewX(45deg);
+}
+
+.arrows li::after {
+    bottom: 0;
+    top: auto;
+    transform: skewX(-45deg);
+}
+
+.arrows li:last-of-type::before,
+.arrows li:last-of-type::after {
+    display: none;
+}
+
+.arrows li a {
+    font: 18px block;
+    letter-spacing: -1px;
+    color: hsl(0, 0%, 75%);
+    text-decoration: none;
+}
+
+.arrows li:first-of-type a {
+    color: hsl(0, 0%, 90%);
+}
+
+.arrows li:last-of-type a {
+    color: hsl(0, 0%, 50%);
+}
+
+/*******************************************************************************
+                                BAR          
+*******************************************************************************/
+
+.bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    background: var(--gl-gradient);
+    /* Definition für das innere Grid */
+    display: grid;
+    grid-template-columns: 1fr 8fr 1fr;
+    grid-gap: 20px;
+    align-items: center;
+}
+
+.bar-text {
+    grid-column: 2;
+    font: 18px block;
+    text-align: left;
+    /* padding: 20px; */
+}
+
+/*******************************************************************************
+                                CONTENT          
+*******************************************************************************/
+
+.content {
+    grid-column: 2 / -2;
+    grid-row: 3;
+    /* Definition für das innere Grid */
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    /* grid-template-rows: repeat(4, 1fr); */
+    /* grid-template-rows: auto; */
+    grid-gap: 20px;
+}
+
+.info {
+    grid-column: 1;
+    /* padding: 20px; */
+}
+
+.headline {
+    font: 18px logo;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.action {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    color: var(--gl-gradient)
+}
+
+.teaser {
+    font: 18px block;
+    text-align: justify;
+    text-justify: auto;
+}
+
+.selection {
+    display: flex;
+    border: 2px solid var(--gl-grey);
+    border-radius: 10px;
+    padding: 20px;
+    /* background-color: var(--gl-transgrey); */
+}
+
+.selection:hover {
+    cursor: pointer;
+    border-color: var(--gl-mint);
+    background-color: var(--gl-transgrey);
+}
+
+.circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    background: var(--gl-honeydew);
+}

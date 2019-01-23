@@ -1,0 +1,21 @@
+# Python Environment
+env/
+
+# Python Stuff
+*.pyc
+__pycache__/
+
+instance/
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+dist/
+build/
+*.egg-info/
+
+# Exclude Fonts from Git because of License
+rund-grotesk_bold.otf
+rund-grotesk-medium.woff
+segoeui*
