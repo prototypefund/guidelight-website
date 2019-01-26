@@ -12,19 +12,20 @@
 
 {% block bar %}
 <form class="search">
-    <input type="text" class="form-text" name="query" placeholder="'LKA Hessen', 'Google', 'Stasi' ..." {% if query %}
-        value="{{ query }}" {% endif %}>
-    <input type="submit" class="form-click" value="Find">
+    <input type="text" class="form-text" id="form-text" name="query" placeholder="'LKA Hessen', 'Google', 'Stasi' ..."
+        {% if query %} value="{{ query }}" {% endif %}>
+    <input type="button" class="btn" id="form-btn" value="Find">
 </form>
 {% endblock %}
 
 {% block content %}
 {% for entity in entities %}
-<a href="/entity/{{ entity.short }}" class="link">
+<a href="/entity/{{ entity.short }}" data-name="{{entity.name}}" data-short="{{entity.short}}" class="link entity">
     <div class="box">
         <div class="circle"></div>
         <h2 class="headline"> {{ entity.name }}</h2>
     </div>
 </a>
 {% endfor %}
+<script src="{{ url_for('static',filename='find.js') }}"></script>
 {% endblock %}

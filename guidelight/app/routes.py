@@ -41,44 +41,13 @@ def entity(short):
 # FORM
 @app.route("/entity/<short>/<action>/")
 def form(short, action):
+    print(f"LOG: {action} form requested for {short}")
     # TODO: resolve only for action
     e = get_doc(short, resolve=True)
     # get the action in docs "actions" list by comparing short name for action
-    c = next((a for a in e["actions"] if a["short"] == action), None)
-    # f = [
-    #     {
-    #         "title": "Auskunftsanfrage",
-    #         "info": "1 kurze Info zu Step 1",
-    #         "type": "text",
-    #         "key": "description",
-    #     },
-    #     {
-    #         "title": "sensible Daten",
-    #         "info": "2 kurze Info zu Step 2",
-    #         "type": "selection",
-    #         "key": "selection1",
-    #     },
-    #     {
-    #         "title": "Identifikation",
-    #         "info": "3 kurze Info zu Step 3",
-    #         "type": "inputfield",
-    #         "key": "inputfield1",
-    #     },
-    #     {
-    #         "title": "Unterschrift",
-    #         "info": "4 kurze Info zu Step 4",
-    #         "type": "inputfield",
-    #         "key": "description",
-    #     },
-    #     {
-    #         "title": "Versandt",
-    #         "info": "5 kurze Info zu Step 5",
-    #         "type": "text",
-    #         "key": "description",
-    #     },
-    # ]
-    return render_template("form.html", entity=e, content=c, form=f)
-    # return f'<h2> GuideLight </h2> {c} Formulargenerator für {short} <br> <br> <a href="/index">back</a>'
+    a = next((a for a in e["actions"] if a["short"] == action), None)
+    return render_template("form.html", entity=e, action=a)
+    # return f'<h2> GuideLight </h2> {action} Formulargenerator für {short} <br> <br> <a href="/index">back</a> {c} <br>'
 
 
 ################################################################################
@@ -86,7 +55,7 @@ def form(short, action):
 ################################################################################
 def get_doc(query=None, resolve=False):
     # get document from DB
-    d = mongo.db.entities.find_one_or_404({"short": sanitize(query)})
+    d = mongo.db.entities.find_one_or_404({"short":sanitize(query)}, {"_id": 0})
     # looks for key:"ref" in document and adds the referenced documents
     if resolve:
         d = recursive_resolve_refs(d, {})
@@ -142,7 +111,8 @@ def sanitize(short):
 @app.route("/favicon.ico")
 def favicon():
     return send_from_directory(
-        "static", "favicon.ico", mimetype="image/vnd.microsoft.icon"
+        "static", "favicon-256x256.png" 
+        # mimetype="image/vnd.microsoft.icon"
     )
 
 

@@ -28,63 +28,6 @@
 }
 
 /*******************************************************************************
-                                BREADCRUMB    
-                    https://css-tricks.com/triangle-breadcrumbs/      
-*******************************************************************************/
-
-.arrows {
-    white-space: nowrap;
-    padding: 0px;
-}
-
-.arrows li {
-    display: inline-block;
-    margin: 0 9px 0 -10px;
-    padding: 0 10px;
-    position: relative;
-}
-
-.arrows li::before,
-.arrows li::after {
-    border-right: 2px solid var(--gl-mint);
-    content: '';
-    display: block;
-    height: 50%;
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    z-index: -1;
-    transform: skewX(45deg);
-}
-
-.arrows li::after {
-    bottom: 0;
-    top: auto;
-    transform: skewX(-45deg);
-}
-
-.arrows li:last-of-type::before,
-.arrows li:last-of-type::after {
-    display: none;
-}
-
-.arrows li a {
-    font: 18px block;
-    letter-spacing: -1px;
-    color: hsl(0, 0%, 75%);
-    text-decoration: none;
-}
-
-.arrows li:first-of-type a {
-    color: hsl(0, 0%, 90%);
-}
-
-.arrows li:last-of-type a {
-    color: hsl(0, 0%, 50%);
-}
-
-/*******************************************************************************
                                 BAR          
 *******************************************************************************/
 
@@ -115,16 +58,31 @@
     /* min-width: 250px; */
 }
 
-.form-click {
+/* .form-btn {
     font: 18px block;
     height: 35px;
     border: none;
     padding: 5px;
     border-radius: 0px 5px 5px 0px;
     background-color: var(--gl-mutemint);
+    outline: none;
 }
 
-.form-click:hover {
+.form-btn:hover {
+    background-color: var(--gl-turquoise);
+} */
+
+.btn {
+    font: 18px block;
+    padding: 8px;
+    margin: 8px 2px 8px 0px;
+    border: none;
+    border-radius: 0px 5px 5px 0px;
+    background-color: var(--gl-mutemint);
+    outline: none;
+}
+
+.btn:hover {
     background-color: var(--gl-turquoise);
 }
 
@@ -161,7 +119,7 @@
 }
 
 .headline {
-    font: 18px logo;
+    font: 14px logo;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;

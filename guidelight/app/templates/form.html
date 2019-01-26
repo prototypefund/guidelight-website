@@ -4,6 +4,9 @@
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='form.css') }}">
 {% endblock %}
 
+{% set form = action.content.form %}
+{% set content = action.content %}
+
 {% block header %}
 <a href="/" class="link">
     <h2>GuideLight</h2>
@@ -11,65 +14,72 @@
 <ul class="arrows">
     <li><a class="link" href="/search">Suche</a></li>
     <li><a class="link" href="/entity/{{entity.short}}">{{entity.name}}</a></li>
-    <!-- <li><a href="/entity/{{entity.short}}/{{content.short}}">{{content.name}}</a></li> -->
-    {% for step in form %}
-    <li class="step">{{step.title}}</li>
+    {% for key in form %}
+    {% set step = content.get(key) %}
+    <li class="step">{{ step.title }}</li>
     {% endfor %}
 </ul>
 {% endblock %}
 
 {% block bar %}
-{% for step in form %}
-<p class="step">{% if step.info %}{{step.info}}{% endif %}</p>
+{% for key in form %}
+{% set step = content.get(key) %}
+<p class="step">{{ step.info }}</p>
 {% endfor %}
 {% endblock %}
 
 {% block content %}
-
-<form action="">
-    {% for step in form %}
+<form>
+    {% for key in form %}
+    {% set step = content.get(key) %}
     <div class="step">
-        {% if step.type == "text" %}
-        <p>{{ step.title }}</p>
-        <p>{{ content.content.get(step.key) }}</p>
-
-        {% elif step.type == "inputfield" %}
-        <p>{{ step.title }}</p>
-        <p>{{ content.content.get(step.key) }}</p>
-        <input id="in" placeholder={{step.description}}>
-
-
-        {% elif step.type == "selection" %}
-        <p>{{ step.title }}</p>
-        <p>{{ content.content.get(step.key).0.description }}</p>
+        {# <p>{{ step.title }}</p> #}
+        <p>{{ step.text }}</p>
+        {% if step.type == "info" %}
+        {# erstmal nichtsweiter #}
+        {% elif step.type == "user" %}
         <fieldset>
-            <legend>Auswahl</legend>
-            {% for o in content.content.get(step.key) %}
-            <input type="checkbox" id="option-{{ loop.index }}" name="1" value="{{o.text}}">
-            <label for="option-{{ loop.index }}">
-                {{o.option}}
-            </label>
+            <legend>Eingabe</legend>
+            {% for item in step.content %}
+
+            {% if item.input == "checkbox" %}
+            <input class="{{key}}" id="{{ item.name }}" name="{{ item.name }}" type="checkbox" value="{{ item.value }}"
+                data-form="">
+
+            {% elif item.input == "text" %}
+            <input class="{{key}}" id="{{ item.name }}" name="{{ item.name }}" type="text" placeholder="{{ item.placeholder }}">
+
+            {% elif item.input == "date" %}
+            <input class="{{key}}" id="{{ item.name }}" name="{{ item.name }}" type="date">
+
+            {% else %}
+            <p> EIN FEHLER: {{item}}</p>
+
+            {% endif %}
+            <label for="{{item.name}}">{{ item.label }}</label>
+
             {% endfor %}
         </fieldset>
-        {% elif step.type == "multiselection" %}
-        <p>{{ step.title }}</p>
-        <p>{{ content.content.get(step.key).0.description }}</p>
-        <fieldset>
-            <legend>Auswahl</legend>
-            {% for o in content.content.get(step.key) %}
-            <input type="radio" id="option-{{ loop.index }}" name="1" value="{{o.text}}">
-            <label for="option-{{ loop.index }}">
-                {{o.option}}
-            </label>
-            {% endfor %}
-        </fieldset>
+        {% elif step.type == "auto" %}
+        {# erstmal nichtsweiter #}
+        {% elif step.type == "summary" %}
+        <p id="summary"></p>
+        <button type="button" class="btn" id="pdfBtn">PDF speichern</button>
+        <button type="button" class="btn" id="mailBtn">Mail verschicken</button>
+        <button type="button" class="btn" id="copyBtn">Text kopieren</button>
+        {# erstmal nichtsweiter #}
         {% endif %}
     </div>
     {% endfor %}
 </form>
-<div class="nav-container">
-    <button type="button" class="next" id="prevBtn">zurück</button>
-    <button type="button" class="next" id="nextBtn">weiter</button>
+<div class="navigation-container">
+    <button type="button" class="btn" id="prevBtn">zurück</button>
+    <button type="button" class="btn" id="nextBtn">weiter</button>
 </div>
+
+<script>content = JSON.parse('{{ content | tojson | safe}}');</script>
+<script>entity = JSON.parse('{{ entity | tojson | safe}}');</script>
+<script src="{{ url_for('static',filename='pdfmake/build/pdfmake.js') }}"></script>
+<script src="{{ url_for('static',filename='pdfmake/build/vfs_fonts.js') }}"></script>
 <script src="{{ url_for('static',filename='form.js') }}"></script>
 {% endblock %}
