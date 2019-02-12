@@ -1,122 +1,154 @@
+{########################### GLOBALE VARIABLEN ###########################}
+{% set letter = entity.action.content %}
+
+{% macro macro_user(type, name, label, value, placeholder="") -%}
+<input id="{{name}}" name="{{name}}" type="{{type}}" value="{{value}}" data-form="" data-validation="{{validation}}"
+    placeholder="{{placeholder}}">
+<label for="{{name}}">{{label}}</label>
+{%- endmacro %}
+
+{% macro macro_user_nested(item) -%}
+<input id="{{item.name}}" name="{{item.name}}" type="{{item.input}}" value="{{item.value}}" data-form=""
+    data-validation="{{item.validation}}" placeholder="{{item.placeholder}}">
+<label for="{{item.name}}">{{item.label}}
+    <input id="{{item.content.name}}" type="{{item.content.input}}" value="{{item.content.value}}" data-form=""
+        data-validation="{{item.content.validation}}" placeholder="{{item.content.placeholder}}">
+</label>
+{%- endmacro %}
+
+{% macro macro_ident(mode=[], title="", dbkey="") -%}
+<fieldset class="ident {{dbkey}}">
+    <legend>{{title}}</legend>
+    {# TODO: div to collapse inputs #}
+    {% for i in mode %}
+    <input id="{{i.name}}" name="{{i.name}}" type="{{i.input}}" value="{{i.value}}" data-form=""
+        placeholder="{{i.placeholder}}" data-validation="{{i.validation}}">
+    <label for="{{i.name}}">{{i.label}}</label>
+    {% endfor %}
+</fieldset>
+{%- endmacro %}
+
+{% macro macro_summary(id, name, text) -%}
+<div class="export {{id}}">
+    <label for="{{id}}">{{text}}</label>
+    <button type="button" class="btn" id="{{id}}-btn">{{name}}</button>
+</div>
+{%- endmacro %}
+
+
+{#################################### BODY ####################################}
 {% extends "base.html" %}
 
 {% block style %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='form.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style/form.css') }}">
 {% endblock %}
 
-{% set form = action.content.form %}
-{% set ident = action.ident %}
-{% set action = action.content %}
-
+{################################### HEADER ###################################}
 {% block header %}
 <a href="/" class="link">
     <h2>GuideLight</h2>
 </a>
 <ul class="arrows">
-    <li><a class="link" href="/search">Suche</a></li>
-    <li><a class="link" href="/entity/{{entity.short}}">{{entity.name}}</a></li>
-    {% for key in form %}
-    {% set step = action.get(key) %}
-    <li class="step">{{ step.title }}</li>
+    <li>
+        <a class="link" href="/search">Suche</a>
+    </li>
+    <li><a class="link" href="/entity/{{entity.short}}">
+            {{entity.name}}</a>
+    </li>
+    {% for key in letter.form %}
+    <li class="step">{{letter.get(key).title}}</li>
     {% endfor %}
 </ul>
 {% endblock %}
 
+{##################################### BAR ####################################}
 {% block bar %}
-{% for key in form %}
-{% set step = action.get(key) %}
-<p class="step">{{ step.info }}</p>
+{% for key in letter.form %}
+<p class="step">{{letter.get(key).info}}</p>
 {% endfor %}
 {% endblock %}
 
+{################################### CONTENT ##################################}
 {% block content %}
 <form>
-    {% for key in form %}
-    {% set step = action.get(key) %}
+    {% for key in letter.form %}
+    {% set step = letter.get(key) %}
     <div class="step">
-        {# <p>{{ step.title }}</p> #}
-        <p>{{ step.text }}</p>
+        <p>{{ step.text|safe }}</p>
+
+        {########################### IF STEP INFO ###########################}
         {% if step.type == "info" %}
-        {# erstmal nichtsweiter #}
+        {# currently nothing happens here #}
+        {########################### IF STEP USER ###########################}
         {% elif step.type == "user" %}
         <fieldset>
             <legend>Eingabe</legend>
-            {% for item in step.content %}
-
-            {# catch one nested special case in DB Datenübertragung #}
-            {% if item.input == "checkbox" and item.content %}
-            <input class="{{key}}" id="{{ item.name }}" name="{{ item.name }}" type="checkbox" value="{{ item.value }}"
-                data-form="">
-            <label for="{{item.name}}">{{ item.label }}
-                <input class="{{key}}" id="{{ item.content.name }}" name="{{ item.content.name }}" type="text"
-                    placeholder="{{ item.content.placeholder }}">
-            </label>
-
-            {% elif item.input == "checkbox" %}
-            <input class="{{key}}" id="{{ item.name }}" name="{{ item.name }}" type="checkbox" value="{{ item.value }}"
-                data-form="">
-            <label for="{{item.name}}">{{ item.label }}</label>
-
-            {% elif item.input == "text" %}
-            <input class="{{key}}" id="{{ item.name }}" name="{{ item.name }}" type="text" placeholder="{{ item.placeholder }}">
-            <label for="{{item.name}}">{{ item.label }}</label>
-
-            {% elif item.input == "date" %}
-            <input class="{{key}}" id="{{ item.name }}" name="{{ item.name }}" type="date">
-            <label for="{{item.name}}">{{ item.label }}</label>
-
+            {% for i in step.content %}
+            {% if i.content %} {# catch nested inputs #}
+            {{ macro_user_nested(i) }}
             {% else %}
-            <p> EIN FEHLER: {{item}}</p>
-
+            {{ macro_user(i.input, i.name, i.label, i.value, i.placeholder) }}
+            {% endif %}
+            {% endfor %}
+            {# CANVAS FOR SIGNATURE #}
+            {% if key == "signature" %}
+            <div>
+                <canvas id="signature-canvas" width="500" height="200" style="border:1px solid black"></canvas>
+                <br>
+                <label for="signature-canvas"><button type="button" id="signature-clear" class="btn">neuer
+                        Versuch</button> Hier kannst du das Anschreiben digital unterschreiben.</label>
+                <script src="{{  url_for('static',filename='script/signature.js')  }}"></script>
+            </div>
+            {% endif %}
+        </fieldset>
+        {########################### IF STEP IDENT ###########################}
+        {% elif step.type == "ident" %}
+        <fieldset>
+            <legend>Eingabe</legend>
+            {% for key in step.content %}
+            {% if not(key == 'description')%}
+            {{ macro_ident( step.content.get(key),
+            step.content.description.get(key), key) }}
             {% endif %}
             {% endfor %}
         </fieldset>
-        {% elif step.type == "ident" %}
-        {% if step.content.account and ident.account != 0 %}
-        <fieldset class="ident">
-            <legend>Account</legend>
-            <input class="ident" id="{{ step.content.account.name }}" name="{{ step.content.account.name }}" type="text"
-                placeholder="{{ step.content.account.placeholder }}" data-required={{step.content.account}}>
-            <label for="{{step.content.account.name}}">{{ step.content.account.label }}</label>
-        </fieldset>
+        {########################## IF STEP SUMMARY ##########################}
+        {# TODO: text generieren überarbeiten bzw. in DB packen #}
+        {# TODO: check if there is mail or formatted address available #}
+        {% elif step.type == "summary" %}
+        {% if formatted_address in entity.contact.address %}
+        {% set text = "Hier kannst du das Anschreiben als PDF exportieren 
+                und via Post verschicken. Wir haben die korrekte Adresse von " + entity.name + " hinzugefügt."%}
+        {{ macro_summary("pdf","PDF speichern",text)}}
+        {% else %}
+        {% set text = "Hier kannst du das Anschreiben als PDF exportieren 
+                und via Post verschicken. Leider haben wir die korrekte Anschrift von " + entity.name + " derzeit nicht vorliegen. Du kannst den Brief trotzdem ausdrucken."%}
+        {{ macro_summary("pdf","PDF speichern",text)}}
         {% endif %}
-        {% if step.content.address and ident.address != 0 %}
-        <fieldset class="ident">
-            <legend>Adresse</legend>
-            {% for item in step.content.address %}
-            <input class="ident" id="{{ item.name }}" name="{{ item.name }}" type="text" placeholder="{{ item.placeholder }}"
-                data-required={{ident.address}}>
-            <label for="{{item.name}}">{{ item.label }}</label>
-            {% endfor %}
-        </fieldset>
-        {% endif %}
-        {% if step.content.id and ident.id != 0 %}
-        <fieldset class="ident">
-            <legend>Ausweiskopie</legend>
-            {# data-required={{ident.address}} #}
-        </fieldset>
+        {# {% elif True %} #}
+        {% set text = "Hier kannst du das Anschreiben als E-Mail verschicken. Die E-Mailadresse von" + entity.name + " wird automatisch ergänzt."%}
+        {{ macro_summary("mail","Mail verschicken",text)}}
+        {# {% elif True %} #}
+        {% set text = "Falls du lediglich den Text des Anschreibens in die Zwischenablage kopieren möchtes, kannst du das hier tuen."%}
+        {{ macro_summary("copy","Text kopieren",text)}}
+        {# {% endif %} #}
         {% endif %}
 
-        {% elif step.type == "auto" %}
-        {# erstmal nichtsweiter #}
-        {% elif step.type == "summary" %}
-        <p id="summary"></p>
-        <button type="button" class="btn" id="pdfBtn">PDF speichern</button>
-        <button type="button" class="btn" id="mailBtn">Mail verschicken</button>
-        <button type="button" class="btn" id="copyBtn">Text kopieren</button>
-        {# erstmal nichtsweiter #}
-        {% endif %}
     </div>
     {% endfor %}
 </form>
 <div class="navigation-container">
-    <button type="button" class="btn" id="prevBtn">zurück</button>
-    <button type="button" class="btn" id="nextBtn">weiter</button>
+    {% if "primary" in letter.description %}
+    {# rel="noopener noreferrer" target="_blank" #}
+    <a href="{{letter.description.primary.url}}" class="btn link" id="link-btn">{{letter.description.primary.value}}</a>
+    {% endif %}
+    <button type="button" class="btn" id="prev-btn">zurück</button>
+    <button type="button" class="btn" id="next-btn">weiter</button>
 </div>
 
-<script>content = JSON.parse('{{ action | tojson | safe}}');</script>
+{########################### JAVASCRIPT IMPORTS ###########################}
 <script>entity = JSON.parse('{{ entity | tojson | safe}}');</script>
-<script src="{{ url_for('static',filename='pdfmake/build/pdfmake.js') }}"></script>
-<script src="{{ url_for('static',filename='pdfmake/build/vfs_fonts.js') }}"></script>
-<script src="{{ url_for('static',filename='form.js') }}"></script>
+<script src="{{ url_for('static',filename='script/pdfmake/build/pdfmake.js') }}"> </script>
+<script src="{{ url_for('static',filename='script/pdfmake/build/vfs_fonts.js') }}"> </script>
+<script src="{{ url_for('static',filename='script/form_2.js') }}"></script>
 {% endblock %}

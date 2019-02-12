@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block style %}
-<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='find.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style/find.css') }}">
 {% endblock %}
 
 {% block header %}
@@ -33,5 +33,5 @@
     </div>
 </a>
 {% endfor %}
-<script src="{{ url_for('static',filename='find.js') }}"></script>
+<script src="{{ url_for('static',filename='script/find.js') }}"></script>
 {% endblock %}
