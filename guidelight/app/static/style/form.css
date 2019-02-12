@@ -152,4 +152,5 @@ label::after {
     height: 200px; */
     margin: 5px 0px 5px 0px;
     border: 1px solid black;
+    touch-action: none;
 }
