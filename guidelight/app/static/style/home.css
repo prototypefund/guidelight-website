@@ -1,19 +1,4 @@
 /*******************************************************************************
-                                MAIN GRID
-                        3 Columns: Border|Content|Border
-                        4 Rows: LOGO-BAR-INFO-FOOTER
-*******************************************************************************/
-
-/* .grid {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 1fr 8fr 1fr;
-    grid-template-rows: repeat(4, auto);
-    ;
-    grid-gap: 20px;
-} */
-
-/*******************************************************************************
                                 LOGO          
 *******************************************************************************/
 
@@ -21,7 +6,7 @@
     grid-column: 2;
     grid-row: 1;
     font: 50px logo, sans-serif;
-    padding: 20px;
+    padding-top: 2vw;
 }
 
 /*******************************************************************************
@@ -32,38 +17,32 @@
     grid-column: 1 / -1;
     grid-row: 2;
     background: var(--gl-gradient);
-    padding: 20px;
     /* Definition für das innere Grid */
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    grid-gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     align-items: center;
 }
 
-.bar-text {
-    /* grid-column: 2; */
+.bar .text {
     font: 18px block;
-    text-align: right;
-    padding: 20px;
+    text-align: center;
+    padding: 2vw;
 }
 
-.search {
-    /* grid-column: 3; */
-    padding: 20px;
+.bar form {
+    padding: 2vw;
 }
 
-.form-text {
-    font: 18px block;
+.bar .input {
     height: 25px;
-    width: 70%;
+    width: 80%;
     border: none;
     padding: 5px;
     border-radius: 5px 0px 0px 5px;
-    /* min-width: 250px; */
+    text-align: left;
 }
 
-.form-click {
-    font: 18px block;
+.bar .btn {
     height: 35px;
     border: none;
     padding: 5px;
@@ -71,7 +50,7 @@
     background-color: var(--gl-mutemint);
 }
 
-.form-click:hover {
+.bar .btn:hover {
     background-color: var(--gl-turquoise);
 }
 

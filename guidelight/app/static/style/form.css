@@ -1,19 +1,4 @@
 /*******************************************************************************
-                                MAIN GRID
-                        3 Columns: Border|Content|Border
-                        4 Rows: LOGO-BAR-INFO-FOOTER
-*******************************************************************************/
-
-/* .grid {
-    min-height: 100vh;
-    display: grid;
-    grid-template-columns: 5vw auto 5vw;
-    grid-template-rows: auto auto 1fr auto;
-    grid-gap: 20px;
-} 
-*/
-
-/*******************************************************************************
                                 LOGO          
 *******************************************************************************/
 
@@ -116,7 +101,6 @@
     padding: 0 2vw 0 2vw;
     text-align: justify;
     text-justify: auto;
-    /* distribute */
     display: inline;
 }
 
@@ -136,16 +120,10 @@ label::after {
 }
 
 .navigation-container {
-    /* position: absolut;
-    bottom: 0;
-    right: 5px; */
     float: right;
 }
 
 .btn {
-    /* appearance: button;
-    text-decoration: none;
-    color: initial; */
     font: 18px block;
     padding: 8px;
     margin: 8px 2px 8px 0px;
@@ -167,4 +145,11 @@ label::after {
 
 .export {
     display: inline-block;
+}
+
+#signature-canvas {
+    /* width: 500px;
+    height: 200px; */
+    margin: 5px 0px 5px 0px;
+    border: 1px solid black;
 }

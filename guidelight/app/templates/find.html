@@ -15,11 +15,12 @@
     <input type="text" class="form-text" id="form-text" name="query" placeholder="'Google', 'Kundenkarte', 'LKA' ..."
         {% if query %} value="{{ query }}" {% endif %}>
     <input type="button" class="btn" id="form-btn" value="Find">
-    <br>
+</form>
+<div class="tags-container">
     {% for tag in tags %}
     <input type="button" class="form-tags" value="{{tag}}">
     {% endfor %}
-</form>
+</div>
 {% endblock %}
 
 {% block content %}
@@ -28,7 +29,7 @@
     class="link entity">
     <div class="box">
         <div class="circle"></div>
-        <h2 class="headline"> {{ entity.name }}</h2>
+        <div class="headline"> {{ entity.name }}</div>
         <span class="tags"> {{ entity.category }}</span>
     </div>
 </a>

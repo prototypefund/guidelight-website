@@ -1,25 +1,30 @@
+{#################################### BODY ####################################}
 {% extends "base.html" %}
 
 {% block style %}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style/home.css') }}">
 {% endblock %}
 
+{################################### HEADER ###################################}
 {% block header %}
-GuideLight zeigt dir, <br>
-wie du deine Daten im Netz <br>
-kontrollieren kannst.
+    {{  "GuideLight zeigt dir, <br>
+    wie du deine Daten im Netz <br> 
+    kontrollieren kannst."|safe  }}
 {% endblock %}
 
+{##################################### BAR ####################################}
 {% block bar %}
-<div class="bar-text">
-    Bestimme, wie Unternehmen und Behörden mit deinen Daten umgehen sollen.
+<div class="text">
+    {{  "Bestimme, wie Unternehmen und Behörden mit deinen 
+        Daten umgehen sollen."|safe  }}
 </div>
-<form class="search">
-    <input type="text" class="form-text" name="query" placeholder="'Google', 'Kundenkarte', 'LKA' ...">
-    <input type="submit" class="form-click" value="Find">
+<form>
+    <input type="text" class="text input" name="query" placeholder="'Google', 'Kundenkarte', 'LKA' ...">
+    <input type="submit" class="text btn" value="Suche">
 </form>
 {% endblock %}
 
+{################################### CONTENT ##################################}
 {% block content %}
 <a href="/blog/DSGVO" class="link">
     <article class="wrap">
@@ -29,74 +34,10 @@ kontrollieren kannst.
             tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
     </article>
 </a>
-<a href="/blog/Auskunftsrecht" class="link">
+<a href="/blog/Suche" class="link">
     <article class="wrap">
         <div class="circle"></div>
-        <h2 class="headline">Auskunftsrecht</h2>
-        <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-    </article>
-</a>
-<a href="/blog/Mahnung" class="link">
-    <article class="wrap">
-        <div class="circle"></div>
-        <h2 class="headline">Mahnung</h2>
-        <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-    </article>
-</a>
-<a href="/blog/Vergessenwerden" class="link">
-    <article class="wrap">
-        <div class="circle"></div>
-        <h2 class="headline">Vergessenwerden</h2>
-        <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-    </article>
-</a>
-<a href="/blog/Berichtigung" class="link">
-    <article class="wrap">
-        <div class="circle"></div>
-        <h2 class="headline">Berichtigung</h2>
-        <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-    </article>
-</a>
-<a href="/blog/Widerspruchsrecht" class="link">
-    <article class="wrap">
-        <div class="circle"></div>
-        <h2 class="headline">Widerspruchsrecht</h2>
-        <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-    </article>
-</a>
-<a href="/blog/Einschränkung" class="link">
-    <article class="wrap">
-        <div class="circle"></div>
-        <h2 class="headline">Einschränkung</h2>
-        <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-    </article>
-</a>
-<a href="/blog/Profiling" class="link">
-    <article class="wrap">
-        <div class="circle"></div>
-        <h2 class="headline">Profiling</h2>
-        <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-    </article>
-</a>
-<a href="/blog/Datenübertragung" class="link">
-    <article class="wrap">
-        <div class="circle"></div>
-        <h2 class="headline">Datenübertragung</h2>
-        <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
-            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
-    </article>
-</a>
-<a href="/blog/Datenbank" class="link">
-    <article class="wrap">
-        <div class="circle"></div>
-        <h2 class="headline">Datenbank</h2>
+        <h2 class="headline">Suche</h2>
         <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
             tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
     </article>
@@ -109,10 +50,42 @@ kontrollieren kannst.
             tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
     </article>
 </a>
-<a href="/blog/BDSG" class="link">
+<a href="/blog/Auskunftsrecht" class="link">
     <article class="wrap">
         <div class="circle"></div>
-        <h2 class="headline">BDSG</h2>
+        <h2 class="headline">Auskunftsrecht</h2>
+        <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+    </article>
+</a>
+<a href="/blog/Korrektur" class="link">
+    <article class="wrap">
+        <div class="circle"></div>
+        <h2 class="headline">Korrektur</h2>
+        <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+    </article>
+</a>
+<a href="/blog/Vergessenwerden" class="link">
+    <article class="wrap">
+        <div class="circle"></div>
+        <h2 class="headline">Vergessenwerden</h2>
+        <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+    </article>
+</a>
+<a href="/blog/Datenübertragung" class="link">
+    <article class="wrap">
+        <div class="circle"></div>
+        <h2 class="headline">Datenübertragung</h2>
+        <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
+            tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
+    </article>
+</a>
+<a href="/blog/Links" class="link">
+    <article class="wrap">
+        <div class="circle"></div>
+        <h2 class="headline">Linksammlung</h2>
         <p class="teaser">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod
             tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.</p>
     </article>
