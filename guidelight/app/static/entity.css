@@ -4,13 +4,15 @@
                         4 Rows: LOGO-BAR-INFO-FOOTER
 *******************************************************************************/
 
+/* 
 .grid {
     min-height: 100vh;
     display: grid;
     grid-template-columns: 1fr 8fr 1fr;
     grid-template-rows: 150px 100px auto 100px;
     grid-gap: 20px;
-}
+} 
+*/
 
 /*******************************************************************************
                                 LOGO          
@@ -87,11 +89,11 @@
                                 BAR          
 *******************************************************************************/
 
+/* 
 .bar {
     grid-column: 1 / -1;
     grid-row: 2;
     background: var(--gl-gradient);
-    /* Definition für das innere Grid */
     display: grid;
     grid-template-columns: 1fr 8fr 1fr;
     grid-gap: 20px;
@@ -102,7 +104,24 @@
     grid-column: 2;
     font: 18px block;
     text-align: left;
-    /* padding: 20px; */
+} 
+*/
+
+.bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    background: var(--gl-gradient);
+    /* Definition für das innere Grid */
+    display: grid;
+    grid-template-columns: 5vw auto 5vw;
+    grid-gap: 20px;
+    align-items: center;
+}
+
+.bar p {
+    font: 18px block;
+    padding: 0 2vw 0 2vw;
+    grid-column: 2;
 }
 
 /*******************************************************************************
@@ -140,22 +159,22 @@
 
 .teaser {
     font: 18px block;
-    text-align: justify;
+    /* text-align: justify; */
     text-justify: auto;
 }
 
 .selection {
-    display: flex;
+    /* display: flex; */
     border: 2px solid var(--gl-grey);
     border-radius: 10px;
     padding: 20px;
-    /* background-color: var(--gl-transgrey); */
+    background-color: var(--gl-transgrey);
 }
 
 .selection:hover {
     cursor: pointer;
     border-color: var(--gl-mint);
-    background-color: var(--gl-transgrey);
+    background-color: var(--gl-grey);
 }
 
 .circle {

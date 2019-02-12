@@ -4,13 +4,14 @@
                         4 Rows: LOGO-BAR-INFO-FOOTER
 *******************************************************************************/
 
-.grid {
+/* .grid {
     min-height: 100vh;
     display: grid;
-    grid-template-columns: 1fr 8fr 1fr;
-    grid-template-rows: 150px 100px auto 100px;
+    grid-template-columns: 5vw auto 5vw;
+    grid-template-rows: auto auto 1fr auto;
     grid-gap: 20px;
-}
+} 
+*/
 
 /*******************************************************************************
                                 LOGO          
@@ -19,7 +20,7 @@
 .logo {
     grid-column: 2;
     grid-row: 1;
-    padding: 20px;
+    padding: 2vw 2vw 0px 2vw;
 }
 
 .logo h2 {
@@ -32,13 +33,13 @@
 *******************************************************************************/
 
 .arrows {
-    white-space: nowrap;
+    /* white-space: nowrap; */
     padding: 0px;
 }
 
 .arrows li {
     display: inline-block;
-    margin: 0 9px 0 -10px;
+    margin: 0 10px 10px -10px;
     padding: 0 10px;
     position: relative;
     font: 18px block;
@@ -91,15 +92,14 @@
     background: var(--gl-gradient);
     /* Definition für das innere Grid */
     display: grid;
-    grid-template-columns: 1fr 8fr 1fr;
+    grid-template-columns: 5vw auto 5vw;
     grid-gap: 20px;
     align-items: center;
 }
 
 .bar p {
     font: 18px block;
-    /* text-align: left; */
-    /* padding: 20px; */
+    padding: 0 2vw 0 2vw;
     grid-column: 2;
 }
 
@@ -113,8 +113,15 @@
     grid-row: 3;
     border: 2px solid var(--gl-grey);
     border-radius: 5px;
-    /* padding: 20px; */
-    position: relative;
+    padding: 0 2vw 0 2vw;
+    text-align: justify;
+    text-justify: auto;
+    /* distribute */
+    display: inline;
+}
+
+.content a {
+    color: black;
 }
 
 /* Hide all steps by default: */
@@ -129,12 +136,16 @@ label::after {
 }
 
 .navigation-container {
-    position: absolute;
+    /* position: absolut;
     bottom: 0;
-    right: 5px;
+    right: 5px; */
+    float: right;
 }
 
 .btn {
+    /* appearance: button;
+    text-decoration: none;
+    color: initial; */
     font: 18px block;
     padding: 8px;
     margin: 8px 2px 8px 0px;
@@ -147,4 +158,13 @@ label::after {
 .btn:hover:enabled {
     background-color: var(--gl-mutemint);
     border-color: var(--gl-grey);
+}
+
+.btn.interacted {
+    background-color: var(--gl-mutemint);
+    border-color: var(--gl-grey);
+}
+
+.export {
+    display: inline-block;
 }

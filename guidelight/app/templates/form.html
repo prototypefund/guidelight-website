@@ -5,7 +5,8 @@
 {% endblock %}
 
 {% set form = action.content.form %}
-{% set content = action.content %}
+{% set ident = action.ident %}
+{% set action = action.content %}
 
 {% block header %}
 <a href="/" class="link">
@@ -15,7 +16,7 @@
     <li><a class="link" href="/search">Suche</a></li>
     <li><a class="link" href="/entity/{{entity.short}}">{{entity.name}}</a></li>
     {% for key in form %}
-    {% set step = content.get(key) %}
+    {% set step = action.get(key) %}
     <li class="step">{{ step.title }}</li>
     {% endfor %}
 </ul>
@@ -23,7 +24,7 @@
 
 {% block bar %}
 {% for key in form %}
-{% set step = content.get(key) %}
+{% set step = action.get(key) %}
 <p class="step">{{ step.info }}</p>
 {% endfor %}
 {% endblock %}
@@ -31,7 +32,7 @@
 {% block content %}
 <form>
     {% for key in form %}
-    {% set step = content.get(key) %}
+    {% set step = action.get(key) %}
     <div class="step">
         {# <p>{{ step.title }}</p> #}
         <p>{{ step.text }}</p>
@@ -42,24 +43,60 @@
             <legend>Eingabe</legend>
             {% for item in step.content %}
 
-            {% if item.input == "checkbox" %}
+            {# catch one nested special case in DB Datenübertragung #}
+            {% if item.input == "checkbox" and item.content %}
             <input class="{{key}}" id="{{ item.name }}" name="{{ item.name }}" type="checkbox" value="{{ item.value }}"
                 data-form="">
+            <label for="{{item.name}}">{{ item.label }}
+                <input class="{{key}}" id="{{ item.content.name }}" name="{{ item.content.name }}" type="text"
+                    placeholder="{{ item.content.placeholder }}">
+            </label>
+
+            {% elif item.input == "checkbox" %}
+            <input class="{{key}}" id="{{ item.name }}" name="{{ item.name }}" type="checkbox" value="{{ item.value }}"
+                data-form="">
+            <label for="{{item.name}}">{{ item.label }}</label>
 
             {% elif item.input == "text" %}
             <input class="{{key}}" id="{{ item.name }}" name="{{ item.name }}" type="text" placeholder="{{ item.placeholder }}">
+            <label for="{{item.name}}">{{ item.label }}</label>
 
             {% elif item.input == "date" %}
             <input class="{{key}}" id="{{ item.name }}" name="{{ item.name }}" type="date">
+            <label for="{{item.name}}">{{ item.label }}</label>
 
             {% else %}
             <p> EIN FEHLER: {{item}}</p>
 
             {% endif %}
-            <label for="{{item.name}}">{{ item.label }}</label>
-
             {% endfor %}
         </fieldset>
+        {% elif step.type == "ident" %}
+        {% if step.content.account and ident.account != 0 %}
+        <fieldset class="ident">
+            <legend>Account</legend>
+            <input class="ident" id="{{ step.content.account.name }}" name="{{ step.content.account.name }}" type="text"
+                placeholder="{{ step.content.account.placeholder }}" data-required={{step.content.account}}>
+            <label for="{{step.content.account.name}}">{{ step.content.account.label }}</label>
+        </fieldset>
+        {% endif %}
+        {% if step.content.address and ident.address != 0 %}
+        <fieldset class="ident">
+            <legend>Adresse</legend>
+            {% for item in step.content.address %}
+            <input class="ident" id="{{ item.name }}" name="{{ item.name }}" type="text" placeholder="{{ item.placeholder }}"
+                data-required={{ident.address}}>
+            <label for="{{item.name}}">{{ item.label }}</label>
+            {% endfor %}
+        </fieldset>
+        {% endif %}
+        {% if step.content.id and ident.id != 0 %}
+        <fieldset class="ident">
+            <legend>Ausweiskopie</legend>
+            {# data-required={{ident.address}} #}
+        </fieldset>
+        {% endif %}
+
         {% elif step.type == "auto" %}
         {# erstmal nichtsweiter #}
         {% elif step.type == "summary" %}
@@ -77,7 +114,7 @@
     <button type="button" class="btn" id="nextBtn">weiter</button>
 </div>
 
-<script>content = JSON.parse('{{ content | tojson | safe}}');</script>
+<script>content = JSON.parse('{{ action | tojson | safe}}');</script>
 <script>entity = JSON.parse('{{ entity | tojson | safe}}');</script>
 <script src="{{ url_for('static',filename='pdfmake/build/pdfmake.js') }}"></script>
 <script src="{{ url_for('static',filename='pdfmake/build/vfs_fonts.js') }}"></script>

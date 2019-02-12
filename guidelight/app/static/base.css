@@ -30,6 +30,21 @@ body {
 }
 
 /*******************************************************************************
+                                MAIN GRID
+                        3 Columns: Border|Content|Border
+                        4 Rows: LOGO-BAR-INFO-FOOTER
+*******************************************************************************/
+
+.grid {
+    min-height: 100vh;
+    display: grid;
+    /* grid-template-columns: 5vw auto 5vw; */
+    grid-template-columns: 5vw auto 5vw;
+    grid-template-rows: auto auto 1fr auto;
+    grid-gap: 20px;
+}
+
+/*******************************************************************************
                       FOOTER and LINK Style is always the same
 *******************************************************************************/
 

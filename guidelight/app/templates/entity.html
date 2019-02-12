@@ -11,15 +11,14 @@
 <ul class="arrows">
     <li><a href="/search">Suche</a></li>
     <li><a href="/entity/{{entity.short}}">{{entity.name}}</a></li>
-    <!-- <li><a href="#">Auskunft</a></li>
-    <li><a href="#">Step 1</a></li> -->
 </ul>
 {% endblock %}
 
 {% block bar %}
-<div class="bar-text">
+{# <div class="bar-text">
     Hier siehst Du eine Übersicht über die Möglichkeiten gegebüber {{entity.name}} deine Rechte geltend zu machen.
-</div>
+</div> #}
+<p class="bar-text">Hier siehst Du eine Übersicht über die Möglichkeiten gegebüber {{entity.name}} deine Rechte geltend zu machen.</p>
 {% endblock %}
 
 {% block content %}
@@ -28,7 +27,7 @@
     <p class="teaser">
         {{entity.name}} gehört der Kategorie {{entity.category}} an. <br>
         {{entity.description}} <br>
-        <a href="{{entity.url}}" class="link">{{entity.url}}</a>
+        <a href="{{entity.contact.url}}" class="link">{{entity.contact.url}}</a>
     </p>
 </div>
 <!-- This is here because i dont understand css grids 
@@ -38,14 +37,16 @@ TODO: learn how auto-placement works and how to place 'selection' properly
 <div></div>
 
 <p class="action teaser">
-    Über welchen Weg möchtest Du über die Nutzung Deiner
-    Daten bestimmen?
+    Welches deiner Rechte möchtest du gegebüber {{entity.name}} in Anspruch nehmen? Wähle eine der folgenden
+    Möglichkeiten aus und starte erstelle ein Anschreiben.
 </p>
 
-{% for action in entity.actions %}
-<a href="/entity/{{entity.short}}/{{action.short}}" class="selection link" title="{{action.content.ref.description}}">
+{# {% for action in entity.actions %} #}
+{% for k, v in entity.actions.items(): %}
+<a href="/entity/{{entity.short}}/{{k}}" class="selection link" title="{{v.description}}">
     <div class="circle"></div>
-    <div class="headline">{{action.name}}</div>
+    <div class="headline">{{v.name}}</div>
+    <div class="teaser">{{v.description}}</div>
 </a>
 {% endfor %}
 {% endblock %}
