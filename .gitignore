@@ -18,7 +18,11 @@ build/
 # Exclude Fonts from Git because of License
 rund-grotesk_bold.otf
 rund-grotesk-medium.woff
+space-grotesk-medium.woff
 segoeui*
 
 # PDFmake Files
 pdfmake/
+
+# Windows
+.DS_Store

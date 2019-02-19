@@ -6,7 +6,7 @@
     ////////////////////////////////////////////////////////////////////////////
     let findBtn = document.getElementById("form-btn"); // Form Button "find"
     let findBar = document.getElementById("form-text");
-    let findTags = document.getElementsByClassName("form-tags");
+    let findTags = document.getElementsByClassName("tags");
     let entities = document.getElementsByClassName("entity");
 
     ////////////////////////////////////////////////////////////////////////////

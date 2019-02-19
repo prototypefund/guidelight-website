@@ -5,7 +5,7 @@
 .logo {
     grid-column: 2;
     grid-row: 1;
-    font: 50px logo, sans-serif;
+    font: 50px --gl-logo, sans-serif;
     padding-top: 2vw;
 }
 
@@ -19,18 +19,21 @@
     background: var(--gl-gradient);
     /* Definition für das innere Grid */
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: 8vw 1fr 1fr 8vw;
+    padding: 2vw 0% 2vw 0%;
     align-items: center;
 }
 
-.bar .text {
-    font: 18px block;
-    text-align: center;
-    padding: 2vw;
+.bar .left {
+    grid-column: 2;
 }
 
-.bar form {
-    padding: 2vw;
+.bar .right {
+    grid-column: 3;
+}
+
+.bar .text {
+    font: 18px --gl-block;
 }
 
 .bar .input {
@@ -73,6 +76,7 @@
     justify-content: center;
     background-color: var(--gl-transgrey);
     padding: 20px;
+    border-radius: 10px;
 }
 
 .wrap:hover {
@@ -90,19 +94,19 @@
 
 .headline {
     align-self: center;
-    font: 25px logo;
+    font: 25px --gl-logo;
     margin-top: -10%;
     margin-bottom: 0px;
 }
 
 .teaser {
     align-self: center;
-    font: 18px block;
+    font: 18px --gl-block;
     overflow: hidden;
     text-align: justify;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     /* fallback */
-    line-height: 20px;
-    max-height: 65px;
+    line-height: 18px;
+    max-height: 54px;
 }

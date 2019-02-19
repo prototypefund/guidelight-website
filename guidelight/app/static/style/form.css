@@ -5,11 +5,11 @@
 .logo {
     grid-column: 2;
     grid-row: 1;
-    padding: 2vw 2vw 0px 2vw;
+    padding-top: 2vw;
 }
 
 .logo h2 {
-    font: 24px logo, sans-serif;
+    font: 24px --gl-logo;
 }
 
 /*******************************************************************************
@@ -27,7 +27,7 @@
     margin: 0 10px 10px -10px;
     padding: 0 10px;
     position: relative;
-    font: 18px block;
+    font: 18px --gl-block;
     letter-spacing: -1px;
     /* color: hsl(0, 0%, 75%); */
     color: var(--gl-grey2);
@@ -77,15 +77,17 @@
     background: var(--gl-gradient);
     /* Definition für das innere Grid */
     display: grid;
-    grid-template-columns: 5vw auto 5vw;
-    grid-gap: 20px;
+    grid-template-columns: 15vw repeat(auto-fit, minmax(300px, 1fr)) 8vw;
+    padding: 2vw 0% 2vw 0%;
     align-items: center;
 }
 
-.bar p {
-    font: 18px block;
-    padding: 0 2vw 0 2vw;
+.bar .left {
     grid-column: 2;
+}
+
+.bar .text {
+    font: 18px --gl-block;
 }
 
 /*******************************************************************************
@@ -93,15 +95,17 @@
 *******************************************************************************/
 
 .content {
-    font: 18px block;
+    position: relative;
+    height: 100%;
+    font: 18px --gl-block;
     grid-column: 2;
     grid-row: 3;
     border: 2px solid var(--gl-grey);
     border-radius: 5px;
-    padding: 0 2vw 0 2vw;
+    margin: 0 6vw 0 6vw;
+    padding: 0 1em 0 1em;
     text-align: justify;
     text-justify: auto;
-    display: inline;
 }
 
 .content a {
@@ -114,19 +118,44 @@
     display: none;
 }
 
+.content .step {
+    margin-bottom: 3em;
+}
+
+input {
+    height: 1em;
+    padding: 5px;
+    border: 2px solid var(--gl-grey);
+    border-radius: 5px;
+}
+
+label {}
+
 label::after {
     content: "";
     display: block;
 }
 
+fieldset {
+    border: 2px solid var(--gl-grey);
+    border-radius: 5px;
+}
+
+fieldset fieldset {
+    border: 2px solid var(--gl-grey);
+    border-radius: 5px;
+    margin: 1em 0% 1em 0%;
+}
+
 .navigation-container {
-    float: right;
+    position: absolute;
+    bottom: .5em;
+    right: 1em;
 }
 
 .btn {
-    font: 18px block;
+    font: 18px --gl-block;
     padding: 8px;
-    margin: 8px 2px 8px 0px;
     border: 2px solid var(--gl-mutemint);
     border-radius: 5px;
     background-color: white;
@@ -143,14 +172,32 @@ label::after {
     border-color: var(--gl-grey);
 }
 
-.export {
-    display: inline-block;
+#signature-canvas {
+    margin: 5px 0px 5px 0px;
+    border: 2px solid var(--gl-grey);
+    border-radius: 5px;
+    touch-action: none;
 }
 
-#signature-canvas {
-    /* width: 500px;
-    height: 200px; */
-    margin: 5px 0px 5px 0px;
-    border: 1px solid black;
-    touch-action: none;
+.export {
+    /* Definition für das innere Grid */
+    display: grid;
+    grid-template-rows: auto-fit;
+    grid-template-columns: 1fr 2fr;
+}
+
+.export-container {
+    grid-column: 2;
+    grid-row: 3;
+}
+
+#letter-canvas {
+    grid-column: 1;
+    grid-row: 1 / 4;
+    width: 50%;
+    font: 10px --gl-block;
+    padding: 1vw;
+    border: 2px solid var(--gl-grey);
+    border-radius: 5px;
+    justify-self: center;
 }

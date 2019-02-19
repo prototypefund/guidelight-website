@@ -9,7 +9,7 @@
 }
 
 .logo h2 {
-    font: 24px logo, sans-serif;
+    font: 24px --gl-logo;
 }
 
 /*******************************************************************************
@@ -33,7 +33,7 @@
 .arrows li::after {
     border-right: 2px solid var(--gl-mint);
     content: '';
-    display: block;
+    display: --gl-block;
     height: 50%;
     position: absolute;
     left: 0;
@@ -55,7 +55,7 @@
 }
 
 .arrows li a {
-    font: 18px block;
+    font: 18px --gl-block;
     letter-spacing: -1px;
     color: hsl(0, 0%, 75%);
     text-decoration: none;
@@ -79,14 +79,21 @@
     background: var(--gl-gradient);
     /* Definition für das innere Grid */
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: 8vw repeat(auto-fit, minmax(300px, 1fr)) 8vw;
+    padding: 2vw 0% 2vw 0%;
     align-items: center;
 }
 
+.bar .left {
+    grid-column: 2;
+}
+
+.bar .right {
+    grid-column: 3;
+}
+
 .bar .text {
-    font: 18px block;
-    /* text-align: center; */
-    padding: 2vw;
+    font: 18px --gl-block;
 }
 
 /*******************************************************************************
@@ -108,7 +115,7 @@
 }
 
 .headline {
-    font: 18px logo;
+    font: 18px --gl-logo;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -121,7 +128,7 @@
 }
 
 .teaser {
-    font: 18px block;
+    font: 18px --gl-block;
     text-justify: auto;
 }
 
@@ -140,8 +147,24 @@
 }
 
 .circle {
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
+    width: 2em;
+    height: 2em;
+    border-radius: 1em;
     background: var(--gl-honeydew);
+}
+
+.selection .headline {
+    font: 18px --gl-logo;
+    margin-top: -1.5em;
+    margin-left: .75em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.selection .teaser {
+    font: 18px --gl-block;
+    margin-top: .75em;
+    margin-left: .75em;
+    text-justify: auto;
 }

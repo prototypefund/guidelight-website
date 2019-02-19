@@ -11,15 +11,20 @@
 {% endblock %}
 
 {% block bar %}
-<form class="search">
-    <input type="text" class="form-text" id="form-text" name="query" placeholder="'Google', 'Kundenkarte', 'LKA' ..."
-        {% if query %} value="{{ query }}" {% endif %}>
-    <input type="button" class="btn" id="form-btn" value="Find">
-</form>
-<div class="tags-container">
-    {% for tag in tags %}
-    <input type="button" class="form-tags" value="{{tag}}">
-    {% endfor %}
+<div class="left">
+    <form>
+        <label class="text" for="form-text">{{"Suche nach Eigennamen oder wähle eine Kategorien."|safe}}</label>
+        <input type="text" class="text input" id="form-text" name="form-text"
+            placeholder="'Google', 'Kundenkarte', 'LKA' ..." {% if query %} value="{{ query }}" {% endif %}>
+        <input type="button" class="text btn" id="form-btn" value="Find">
+    </form>
+</div>
+<div class="right text">
+    <div class="tags-container">
+        {% for tag in tags %}
+        <input type="button" class="tags" value="{{tag}}">
+        {% endfor %}
+    </div>
 </div>
 {% endblock %}
 
@@ -29,8 +34,8 @@
     class="link entity">
     <div class="box">
         <div class="circle"></div>
-        <div class="headline"> {{ entity.name }}</div>
-        <span class="tags"> {{ entity.category }}</span>
+        <!-- <span class="tags"> {{ entity.category }}</span> -->
+        <div class="name" title="{{entity.category}}:&#013;{{entity.name}}">{{ entity.name }}</div>
     </div>
 </a>
 {% endfor %}

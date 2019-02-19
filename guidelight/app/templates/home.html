@@ -7,21 +7,23 @@
 
 {################################### HEADER ###################################}
 {% block header %}
-    {{  "GuideLight zeigt dir, <br>
+{{  "GuideLight zeigt dir, <br>
     wie du deine Daten im Netz <br> 
     kontrollieren kannst."|safe  }}
 {% endblock %}
 
 {##################################### BAR ####################################}
 {% block bar %}
-<div class="text">
-    {{  "Bestimme, wie Unternehmen und Behörden mit deinen 
-        Daten umgehen sollen."|safe  }}
+<div class="left text">
+    {{"Hier kannst du bestimme, wie mit deinen Daten umgeganden werden soll.
+     Wähle aus unserer Datenbank von über 2700 Unternehmen und Behörde:"|safe}}
 </div>
-<form>
-    <input type="text" class="text input" name="query" placeholder="'Google', 'Kundenkarte', 'LKA' ...">
-    <input type="submit" class="text btn" value="Suche">
-</form>
+<div class="right">
+    <form>
+        <input type="text" class="text input" name="query" placeholder="'Google', 'Kundenkarte', 'LKA' ...">
+        <input type="submit" class="text btn" value="Suche">
+    </form>
+</div>
 {% endblock %}
 
 {################################### CONTENT ##################################}

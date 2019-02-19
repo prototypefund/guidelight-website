@@ -15,32 +15,42 @@
 {% endblock %}
 
 {% block bar %}
-<div class="text">
-    Hier siehst Du eine Übersicht über die Möglichkeiten gegebüber {{entity.name}} deine Rechte geltend zu machen.
+<div class="left text">
+    Hier siehst Du eine Übersicht über die Möglichkeiten gegebüber
+    {{entity.name}} deine Rechte geltend zu machen. Welches deiner Rechte möchtest du gegebüber {{entity.name}} in
+    Anspruch nehmen?
 </div>
-{# <p class="bar-text">Hier siehst Du eine Übersicht über die Möglichkeiten gegebüber {{entity.name}} deine Rechte geltend zu machen.</p> #}
+<div class="right text">Wähle weiter unten eine Möglichkeiten aus.</div>
 {% endblock %}
 
 {% block content %}
 <div class="info">
     <h2 class="headline">{{entity.name}}</h2>
     <p class="teaser">
-        {{entity.name}} gehört der Kategorie {{entity.category}} an. <br>
-        {{entity.description}} <br>
+        {{entity.name}} gehört der Kategorie {{entity.category}} an.
+        <br>
+        {{entity.description}}
+        <br>
+        Die Website:
         <a href="{{entity.contact.url}}" class="link">{{entity.contact.url}}</a>
     </p>
 </div>
-<p class="action teaser">
-    Welches deiner Rechte möchtest du gegebüber {{entity.name}} in Anspruch nehmen? Wähle eine der folgenden
+<!-- <p class="action teaser">
+    Welches deiner Rechte möchtest du gegebüber {{entity.name}} in Anspruch nehmen?
+    <br>
+    Wähle eine der folgenden
     Möglichkeiten aus und starte erstelle ein Anschreiben.
-</p>
+</p> -->
 
 {# {% for action in entity.actions %} #}
 {% for k, v in entity.actions.items(): %}
 <a href="/entity/{{entity.short}}/{{k}}" class="selection link" title="{{v.description}}">
     <div class="circle"></div>
     <div class="headline">{{v.name}}</div>
-    <div class="teaser">{{v.description}}</div>
+    <!-- <details class="teaser"> -->
+    <summary class="teaser">{{v.description}}</summary>
+    <!-- <p>{{v.description}} EXTENDED</p> -->
+    <!-- </details> -->
 </a>
 {% endfor %}
 {% endblock %}

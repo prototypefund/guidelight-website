@@ -29,9 +29,9 @@
 {%- endmacro %}
 
 {% macro macro_summary(id, name, text) -%}
-<div class="export {{id}}">
-    <label for="{{id}}">{{text}}</label>
-    <button type="button" class="btn" id="{{id}}-btn">{{name}}</button>
+<div class="{{id}}">
+    {# <label for="{{id}}">{{text}}</label> #}
+    <button type="button" class="btn" id="{{id}}-btn" title="{{text}}">{{name}}</button>
 </div>
 {%- endmacro %}
 
@@ -64,7 +64,7 @@
 {##################################### BAR ####################################}
 {% block bar %}
 {% for key in letter.form %}
-<p class="step">{{letter.get(key).info}}</p>
+<div class="step left text">{{letter.get(key).info}}</div>
 {% endfor %}
 {% endblock %}
 
@@ -82,10 +82,11 @@
         {########################### IF STEP USER ###########################}
         {% elif step.type == "user" %}
         <fieldset>
-            <legend>Eingabe</legend>
+            <legend> Eingabe </legend>
             {% for i in step.content %}
             {% if i.content %} {# catch nested inputs #}
             {{ macro_user_nested(i) }}
+            <br>
             {% else %}
             {{ macro_user(i.input, i.name, i.label, i.value, i.placeholder) }}
             {% endif %}
@@ -93,10 +94,11 @@
             {# CANVAS FOR SIGNATURE #}
             {% if key == "signature" %}
             <div>
+             <label for="signature-canvas"> Hier kannst du das Anschreiben digital unterschreiben.</label>
                 <canvas id="signature-canvas" ></canvas>
                 <br>
-                <label for="signature-canvas"><button type="button" id="signature-clear" class="btn">neuer
-                        Versuch</button> Hier kannst du das Anschreiben digital unterschreiben.</label>
+                <button type="button" id="signature-clear" class="btn">nochmal
+                        Unterschreiben</button>
                 <script src="{{  url_for('static',filename='script/signature.js')  }}"></script>
             </div>
             {% endif %}
@@ -104,7 +106,7 @@
         {########################### IF STEP IDENT ###########################}
         {% elif step.type == "ident" %}
         <fieldset>
-            <legend>Eingabe</legend>
+            <legend> Eingabe </legend>
             {% for key in step.content %}
             {% if not(key == 'description')%}
             {{ macro_ident( step.content.get(key),
@@ -115,23 +117,27 @@
         {########################## IF STEP SUMMARY ##########################}
         {# TODO: text generieren überarbeiten bzw. in DB packen #}
         {# TODO: check if there is mail or formatted address available #}
+        
         {% elif step.type == "summary" %}
+        <div class="export"> 
+        <div id="letter-canvas"></div>
+        <div class="export-container"> 
         {% if formatted_address in entity.contact.address %}
-        {% set text = "Hier kannst du das Anschreiben als PDF exportieren 
-                und via Post verschicken. Wir haben die korrekte Adresse von " + entity.name + " hinzugefügt."%}
+        {% set text = "Wir haben die korrekte Adresse von " + entity.name + " hinzugefügt. Du kannst den Brief als PDF speichern und ausdrucken."%}
         {{ macro_summary("pdf","PDF speichern",text)}}
         {% else %}
-        {% set text = "Hier kannst du das Anschreiben als PDF exportieren 
-                und via Post verschicken. Leider haben wir die korrekte Anschrift von " + entity.name + " derzeit nicht vorliegen. Du kannst den Brief trotzdem ausdrucken."%}
-        {{ macro_summary("pdf","PDF speichern",text)}}
+        {% set text = "Leider haben wir die korrekte Anschrift von " + entity.name + " derzeit nicht vorliegen. Du kannst den Brief trotzdem als PDF speichern und ausdrucken."%}
+        {{ macro_summary("pdf","als PDF speichern",text)}}
         {% endif %}
         {# {% elif True %} #}
-        {% set text = "Hier kannst du das Anschreiben als E-Mail verschicken. Die E-Mailadresse von" + entity.name + " wird automatisch ergänzt."%}
-        {{ macro_summary("mail","Mail verschicken",text)}}
+        {% set text = "Die E-Mailadresse von" + entity.name + " wird automatisch ergänzt."%}
+        {{ macro_summary("mail","als Mail verschicken",text)}}
         {# {% elif True %} #}
         {% set text = "Falls du lediglich den Text des Anschreibens in die Zwischenablage kopieren möchtes, kannst du das hier tuen."%}
-        {{ macro_summary("copy","Text kopieren",text)}}
+        {{ macro_summary("copy","in Zwischablage kopieren",text)}}
         {# {% endif %} #}
+        </div>
+        </div>
         {% endif %}
 
     </div>
