@@ -10,7 +10,7 @@
     ////////////////////////////////////////////////////////////////////////////
     // SELECTORS
     ////////////////////////////////////////////////////////////////////////////
-    let linkBtn = document.getElementById("link-btn"); // Form Button forward
+    let linkBtn = document.getElementById("link-btn"); // Link to Entity Service
     let nextBtn = document.getElementById("next-btn"); // Form Button forward
     let prevBtn = document.getElementById("prev-btn"); // Form Button backwards
     let pdfBtn = document.getElementById("pdf-btn");
@@ -23,9 +23,7 @@
     let logoSteps = logo.getElementsByClassName("step");
     let barSteps = bar.getElementsByClassName("step");
     let formSteps = form.getElementsByClassName("step");
-
-    let pdfContainer = form.querySelector(".export.pdf");
-
+    let addrContainer = document.getElementById("export-curaddr");
 
     ////////////////////////////////////////////////////////////////////////////
     // METHODS FORM AND INIT
@@ -112,6 +110,7 @@
                 linkBtn.style.display = "none";
                 linkBtn.disabled = true;
             }
+            previewText();
         } else {
             nextBtn.style.display = "inline-block";
             nextBtn.innerHTML = "weiter";
@@ -152,20 +151,29 @@
         let formData = serializeArray(document.querySelector("form"));
         let content = entity.action.content
         // console.log(formData);
-        // TODO: Formular nicht klonen 
         if ((!formData.city || !formData.zip || !formData.street) &&
-            !(pdfContainer.firstChild.type == "fieldset")) {
-            let itm = document.querySelector(".ident.curaddr");
-            let cln = itm.cloneNode(true);
-            pdfContainer.insertBefore(cln, pdfContainer.firstChild);
+            !(addrContainer.style.display == "block")) {
+            document.getElementById("export-curaddr").style.display = "block";
         } else {
-            let text = preRender(formData, content);
-            // TODO: hanle Adblocker and different Browser
-            pdfMake.createPdf(layoutPDF(text)).download(content.name + ".pdf");
-
-            buttonFeedback(pdfBtn, "PDF gespeichert!")
+            // TODO: make less ugly and universal for all attachments
+            if (formData["Ausweiskopie"]) {
+                let field = document.querySelector('input[name="Ausweiskopie"]')
+                let FR = new FileReader();
+                FR.addEventListener("load", function (e) {
+                    formData.attachment = e.target.result;
+                    exportPDF(preRender(formData, content), content.name);
+                });
+                FR.readAsDataURL(field.files[0]);
+            } else {
+                exportPDF(preRender(formData, content), content.name);
+            }
         }
+    }
 
+    function exportPDF(text, name) {
+        // TODO: hanle Adblocker and different Browser
+        pdfMake.createPdf(layoutPDF(text)).download(name + ".pdf");
+        buttonFeedback(pdfBtn, "PDF gespeichert!")
     }
 
     function sendMail() {
@@ -197,6 +205,20 @@
         document.body.removeChild(el);
 
         buttonFeedback(copyBtn, "Text kopiert!")
+    }
+
+    function previewText() {
+        console.log("preview");
+
+        let formData = serializeArray(document.querySelector("form"));
+        let content = entity.action.content
+        let text = preRender(formData, content);
+
+        // create temp node to copy text from
+        let letter = text.subject.join(" ") + "\n\n"
+        letter += text.body.join("\n\n");
+
+        document.getElementById("letter-canvas").innerText = letter;
     }
 
     ////////////////////////////////////////////////////////////////////////////
@@ -270,6 +292,10 @@
 
         // return dd + '.' + mm + '.' + yyyy;
         return yyyy + '-' + mm + '-' + dd;
+    }
+
+    function styleDate(d) {
+        return d.split("-").reverse().join(".")
     }
 
     ///////////////////////////////////////////////////////////////////////////
@@ -355,7 +381,7 @@
             }
         }
         if (doc.attachment) {
-            let att = { image: doc.attachment, pageBreak: 'before' }
+            let att = { image: doc.attachment, pageBreak: 'before', fit: [450, 800] }
             docLayout.content.push(att)
         }
         return docLayout;
@@ -367,15 +393,20 @@
 
         let d = { "from": [], "date": [], "to": [], "subject": [], "ident": [], "body": [], "canvas": "", "signature": [], "attachment": "" };
 
-        d.from.push(f.name || "... ... Name", f.street || "... ... Straße", f.city || "... ... Stadt");
-        d.date.push((f.place || "... ... ") + " " + (formatDate(f.date)));
+        d.from.push(f.name, f.street, ((f.zip) + " " + (f.city || "Absender")));
+        d.date.push((f.place) + " " + styleDate((formatDate(f.date))));
         if (entity.contact.hasOwnProperty('address')) {
             d.to.push(...entity.contact.address.formatted_address.split(/\s*;\s*/));
         } else {
-            d.to.push("... ... Adresse");
+            d.to.push("Empfänger");
         }
         d.subject.push(...c.subject.content);
-        d.ident.push(f.ident || "... ... Identifikation");
+
+        d.ident.push(f["Kundennummer/Benutzername"] ? "Kundennummer: " + f["Kundennummer/Benutzername"] : "");
+        d.ident.push(f["Rechnungsnummer"] ? "Rechnungsnummer: " + f["Rechnungsnummer"] : "");
+        d.ident.push(f["vorherige Anschrift"] ? "vorherige Anschrift: " + f["vorherige Anschrift"] : "");
+        d.ident.push(f["Ausweiskopie"] ? "Ausweiskopie im Anhang" : "");
+
         c.letter.forEach(key => {
             let type = c[key].type;
             if (type == "letter") {
@@ -390,10 +421,17 @@
                             d.body.push(f[item.content.name]);
                         }
                     }
+                    else if (item.input == "textarea" && f[item.name]) {
+                        d.body.push(f[item.name]);
+                        // catch nested special case in DB Datenübertragung
+                        if (item.content) {
+                            d.body.push(f[item.content.name]);
+                        }
+                    }
                 });
             }
             else if (type == "deadline") {
-                d.body.push(formatDate(f.date, c[key].content));
+                d.body.push(styleDate(formatDate(f.date, c[key].content)));
             }
         });
 
@@ -401,7 +439,7 @@
         d.canvas = document.getElementById('signature-canvas').toDataURL("image/png");
         d.signature.push((f.place || "... ... Ort") + " " + (formatDate(f.date)), ...f.name);
 
-        // d.attachment = f.ident || false;
+        d.attachment = f.attachment || false;
 
         return d;
     }

@@ -77,7 +77,7 @@
     background: var(--gl-gradient);
     /* Definition für das innere Grid */
     display: grid;
-    grid-template-columns: 15vw repeat(auto-fit, minmax(300px, 1fr)) 8vw;
+    grid-template-columns: 17vw repeat(auto-fit, minmax(300px, 1fr)) 8vw;
     padding: 2vw 0% 2vw 0%;
     align-items: center;
 }
@@ -102,8 +102,8 @@
     grid-row: 3;
     border: 2px solid var(--gl-grey);
     border-radius: 5px;
-    margin: 0 6vw 0 6vw;
-    padding: 0 1em 0 1em;
+    margin: 0 8vw 0 8vw;
+    padding: 1vw 2vw 0 2vw;
     text-align: justify;
     text-justify: auto;
 }
@@ -111,8 +111,6 @@
 .content a {
     color: black;
 }
-
-/* Hide all steps by default: */
 
 .step {
     display: none;
@@ -122,29 +120,49 @@
     margin-bottom: 3em;
 }
 
-input {
-    height: 1em;
-    padding: 5px;
-    border: 2px solid var(--gl-grey);
-    border-radius: 5px;
-}
-
-label {}
-
-label::after {
-    content: "";
-    display: block;
-}
-
 fieldset {
     border: 2px solid var(--gl-grey);
     border-radius: 5px;
 }
 
-fieldset fieldset {
+details {
     border: 2px solid var(--gl-grey);
     border-radius: 5px;
     margin: 1em 0% 1em 0%;
+}
+
+.input-row {
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: auto 1fr;
+}
+
+input {
+    grid-column: 1;
+    align-self: center;
+    height: 1.5em;
+    padding: 5px;
+    border: 2px solid var(--gl-grey);
+    border-radius: 5px;
+}
+
+textarea {
+    grid-column: 1;
+    font: 18px --gl-block;
+    padding: 5px;
+    border: 2px solid var(--gl-grey);
+    border-radius: 5px;
+    resize: none;
+}
+
+label {
+    grid-column: 2;
+    align-self: center;
+}
+
+label::after {
+    content: "";
+    display: block;
 }
 
 .navigation-container {
@@ -182,8 +200,8 @@ fieldset fieldset {
 .export {
     /* Definition für das innere Grid */
     display: grid;
-    grid-template-rows: auto-fit;
-    grid-template-columns: 1fr 2fr;
+    grid-template-rows: auto;
+    grid-template-columns: 2fr 3fr;
 }
 
 .export-container {
@@ -191,13 +209,22 @@ fieldset fieldset {
     grid-row: 3;
 }
 
-#letter-canvas {
+.letter-container {
     grid-column: 1;
     grid-row: 1 / 4;
-    width: 50%;
+}
+
+#letter-canvas {
+    justify-self: center;
+    width: 75%;
+    height: 80%;
     font: 10px --gl-block;
     padding: 1vw;
+    margin-bottom: 1vw;
     border: 2px solid var(--gl-grey);
     border-radius: 5px;
-    justify-self: center;
+}
+
+#export-curaddr {
+    display: none;
 }

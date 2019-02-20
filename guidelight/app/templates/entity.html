@@ -15,12 +15,7 @@
 {% endblock %}
 
 {% block bar %}
-<div class="left text">
-    Hier siehst Du eine Übersicht über die Möglichkeiten gegebüber
-    {{entity.name}} deine Rechte geltend zu machen. Welches deiner Rechte möchtest du gegebüber {{entity.name}} in
-    Anspruch nehmen?
-</div>
-<div class="right text">Wähle weiter unten eine Möglichkeiten aus.</div>
+<div class="left text">Wähle weiter unten eine Möglichkeiten aus.</div>
 {% endblock %}
 
 {% block content %}
@@ -34,6 +29,11 @@
         Die Website:
         <a href="{{entity.contact.url}}" class="link">{{entity.contact.url}}</a>
     </p>
+    <div class="teaser">
+        Hier siehst Du eine Übersicht über die Möglichkeiten gegebüber
+        {{entity.name}} deine Rechte geltend zu machen. Welches deiner Rechte möchtest du gegebüber {{entity.name}} in
+        Anspruch nehmen?
+    </div>
 </div>
 <!-- <p class="action teaser">
     Welches deiner Rechte möchtest du gegebüber {{entity.name}} in Anspruch nehmen?

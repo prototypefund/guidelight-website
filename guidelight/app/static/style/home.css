@@ -19,7 +19,7 @@
     background: var(--gl-gradient);
     /* Definition für das innere Grid */
     display: grid;
-    grid-template-columns: 8vw 1fr 1fr 8vw;
+    grid-template-columns: 4vw 1fr 1fr 4vw;
     padding: 2vw 0% 2vw 0%;
     align-items: center;
 }

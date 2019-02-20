@@ -1,36 +1,58 @@
 {########################### GLOBALE VARIABLEN ###########################}
 {% set letter = entity.action.content %}
 
+{% macro macro_user_textarea(type, name, label, value, placeholder="") -%}
+<div class="input-row">
+<textarea name="{{name}}" data-form="" data-validation="{{validation}}"
+    placeholder="{{placeholder}}" cols="40" rows="5"></textarea>
+<label for="{{name}}">{{label}}</label>
+</div>
+{%- endmacro %}
+
 {% macro macro_user(type, name, label, value, placeholder="") -%}
+<div class="input-row">
 <input id="{{name}}" name="{{name}}" type="{{type}}" value="{{value}}" data-form="" data-validation="{{validation}}"
     placeholder="{{placeholder}}">
 <label for="{{name}}">{{label}}</label>
+</div>
 {%- endmacro %}
 
 {% macro macro_user_nested(item) -%}
+<div class="input-row">
 <input id="{{item.name}}" name="{{item.name}}" type="{{item.input}}" value="{{item.value}}" data-form=""
     data-validation="{{item.validation}}" placeholder="{{item.placeholder}}">
 <label for="{{item.name}}">{{item.label}}
     <input id="{{item.content.name}}" type="{{item.content.input}}" value="{{item.content.value}}" data-form=""
         data-validation="{{item.content.validation}}" placeholder="{{item.content.placeholder}}">
 </label>
+</div>
 {%- endmacro %}
 
 {% macro macro_ident(mode=[], title="", dbkey="") -%}
-<fieldset class="ident {{dbkey}}">
-    <legend>{{title}}</legend>
+<details class="ident {{dbkey}}">
+    <summary>{{title}}</summary>
     {# TODO: div to collapse inputs #}
     {% for i in mode %}
-    <input id="{{i.name}}" name="{{i.name}}" type="{{i.input}}" value="{{i.value}}" data-form=""
+    <div class="input-row">
+    <input id="{{i.name}}" name="{{title}}" type="{{i.input}}" value="{{i.value}}" data-form="{{title}}"
         placeholder="{{i.placeholder}}" data-validation="{{i.validation}}">
     <label for="{{i.name}}">{{i.label}}</label>
+    </div>
     {% endfor %}
-</fieldset>
+</details>
 {%- endmacro %}
 
 {% macro macro_summary(id, name, text) -%}
-<div class="{{id}}">
-    {# <label for="{{id}}">{{text}}</label> #}
+<div class="{{id}}">{% if id=="pdf" %}<fieldset id="export-curaddr" class="ident curaddr">
+        <legend>Anschrift</legend>
+        <div>Hier kann noch deine Anschrift für den Brief ergänzt werden.</div>
+        <input id="street2" name="street" type="text" value="" data-form="" placeholder="Straße" data-validation="">
+        <label for="street">Straße und Hausnummer.</label>
+        <input id="zip2" name="zip" type="text" value="" data-form="" placeholder="PLZ" data-validation="">
+        <label for="zip">Postleitzahl.</label>
+        <input id="city2" name="city" type="text" value="" data-form="" placeholder="Ort" data-validation="">
+        <label for="city">Wohnort.</label>
+        </fieldset>{% endif %}
     <button type="button" class="btn" id="{{id}}-btn" title="{{text}}">{{name}}</button>
 </div>
 {%- endmacro %}
@@ -88,15 +110,20 @@
             {{ macro_user_nested(i) }}
             <br>
             {% else %}
+
+            {% if i.input == "textarea" %}
+            {{ macro_user_textarea(i.input, i.name, i.label, i.value, i.placeholder) }}
+            {% else %}
             {{ macro_user(i.input, i.name, i.label, i.value, i.placeholder) }}
+            {% endif %}
+
             {% endif %}
             {% endfor %}
             {# CANVAS FOR SIGNATURE #}
             {% if key == "signature" %}
-            <div>
-             <label for="signature-canvas"> Hier kannst du das Anschreiben digital unterschreiben.</label>
+            <div class="input-row">
                 <canvas id="signature-canvas" ></canvas>
-                <br>
+                <label for="signature-canvas"> Hier kannst du das Anschreiben digital unterschreiben.</label>
                 <button type="button" id="signature-clear" class="btn">nochmal
                         Unterschreiben</button>
                 <script src="{{  url_for('static',filename='script/signature.js')  }}"></script>
@@ -120,8 +147,14 @@
         
         {% elif step.type == "summary" %}
         <div class="export"> 
+        <div class="letter-container">
         <div id="letter-canvas"></div>
+        {% set text = "Falls du lediglich den Text des Anschreibens in die Zwischenablage kopieren möchtes, kannst du das hier tuen."%}
+        {{ macro_summary("copy","in Zwischablage kopieren",text)}}
+        </div>
+        
         <div class="export-container"> 
+
         {% if formatted_address in entity.contact.address %}
         {% set text = "Wir haben die korrekte Adresse von " + entity.name + " hinzugefügt. Du kannst den Brief als PDF speichern und ausdrucken."%}
         {{ macro_summary("pdf","PDF speichern",text)}}
@@ -129,13 +162,11 @@
         {% set text = "Leider haben wir die korrekte Anschrift von " + entity.name + " derzeit nicht vorliegen. Du kannst den Brief trotzdem als PDF speichern und ausdrucken."%}
         {{ macro_summary("pdf","als PDF speichern",text)}}
         {% endif %}
+
         {# {% elif True %} #}
         {% set text = "Die E-Mailadresse von" + entity.name + " wird automatisch ergänzt."%}
         {{ macro_summary("mail","als Mail verschicken",text)}}
-        {# {% elif True %} #}
-        {% set text = "Falls du lediglich den Text des Anschreibens in die Zwischenablage kopieren möchtes, kannst du das hier tuen."%}
-        {{ macro_summary("copy","in Zwischablage kopieren",text)}}
-        {# {% endif %} #}
+
         </div>
         </div>
         {% endif %}
