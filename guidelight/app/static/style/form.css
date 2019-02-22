@@ -157,6 +157,7 @@ textarea {
 
 label {
     grid-column: 2;
+    text-align: left;
     align-self: center;
 }
 

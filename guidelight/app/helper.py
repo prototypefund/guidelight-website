@@ -106,7 +106,7 @@ def check_parameter(query=None, key="entity_short"):
 
 def filter_short(short):
     # only allow 6 to 8 characters of: a-z, A-Z, 0-9, _ or -
-    if re.match(r"^[\w-]{6,10}$", short):
+    if re.match(r"^[\w-]{6,11}$", short):
         return short
     else:
         print("SANITIZER: {}".format(short))

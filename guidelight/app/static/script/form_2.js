@@ -160,7 +160,11 @@
                 let field = document.querySelector('input[name="Ausweiskopie"]')
                 let FR = new FileReader();
                 FR.addEventListener("load", function (e) {
-                    formData.attachment = e.target.result;
+                    // check if uploaded file is a picture
+                    if (e.target.result.search(/data:image/) == 0) {
+                        console.log("BILD");
+                        formData.attachment = e.target.result;
+                    }
                     exportPDF(preRender(formData, content), content.name);
                 });
                 FR.readAsDataURL(field.files[0]);
@@ -208,8 +212,6 @@
     }
 
     function previewText() {
-        console.log("preview");
-
         let formData = serializeArray(document.querySelector("form"));
         let content = entity.action.content
         let text = preRender(formData, content);
@@ -437,7 +439,7 @@
 
         // signature input with mouse
         d.canvas = document.getElementById('signature-canvas').toDataURL("image/png");
-        d.signature.push((f.place || "... ... Ort") + " " + (formatDate(f.date)), ...f.name);
+        d.signature.push((f.place || "Ort") + " " + (formatDate(f.date)), ...f.name);
 
         d.attachment = f.attachment || false;
 
