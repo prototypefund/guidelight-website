@@ -248,6 +248,7 @@
                 let field = form.elements[i];
                 // && field.type != 'file'
                 if (field.name && !field.disabled && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
+
                     if (field.type == 'select-multiple') {
                         let l = form.elements[i].options.length;
                         for (j = 0; j < l; j++) {
@@ -255,7 +256,8 @@
                                 // s[s.length] = {[field.name]: field.options[j].value };
                                 s[field.name] = field.options[j].value;
                         }
-                    } else if (field.type == "date") {
+                    }
+                    else if (field.type == "date") {
                         // s[field.name] = formatDate(new Date(field.value));
                         s[field.name] = field.value;
                     }
@@ -272,6 +274,7 @@
                         // s[s.length] = { [field.name]: field.value };
                         s[field.name] = field.value;
                     }
+
                 }
             }
         }
@@ -416,14 +419,7 @@
             }
             else if (type == "user") {
                 c[key].content.forEach(item => {
-                    if (item.input == "checkbox" && f[item.name]) {
-                        d.body.push(f[item.name]);
-                        // catch nested special case in DB Datenübertragung
-                        if (item.content) {
-                            d.body.push(f[item.content.name]);
-                        }
-                    }
-                    else if (item.input == "textarea" && f[item.name]) {
+                    if ((item.input == "checkbox" || item.input == "textarea" || item.input == "date") && f[item.name]) {
                         d.body.push(f[item.name]);
                         // catch nested special case in DB Datenübertragung
                         if (item.content) {

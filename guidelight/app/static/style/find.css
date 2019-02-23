@@ -91,7 +91,7 @@
     padding: 20px;
     /* Definition für das innere Grid */
     display: grid;
-    grid-template-rows: auto-fill;
+    grid-template-rows: fit-content(100%);
     grid-template-columns: repeat(auto-fill, minmax(150px, auto));
     grid-gap: 10px;
 }

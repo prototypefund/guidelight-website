@@ -112,6 +112,15 @@
     color: black;
 }
 
+.content blockquote {
+    font: 14px --gl-block;
+    padding: 0.5em;
+    margin: 0.5em;
+    text-align: left;
+    border: thin solid var(--gl-pale);
+    border-radius: 5px;
+}
+
 .step {
     display: none;
 }
@@ -132,6 +141,7 @@ details {
 }
 
 .input-row {
+    margin-bottom: 1em;
     display: grid;
     grid-gap: 10px;
     grid-template-columns: auto 1fr;

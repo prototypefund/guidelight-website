@@ -4,13 +4,10 @@ env/
 # Python Stuff
 *.pyc
 __pycache__/
-
 instance/
-
 .pytest_cache/
 .coverage
 htmlcov/
-
 dist/
 build/
 *.egg-info/
@@ -20,6 +17,9 @@ rund-grotesk_bold.otf
 rund-grotesk-medium.woff
 space-grotesk-medium.woff
 segoeui*
+
+# Exclude Texte/Content
+texte/
 
 # PDFmake Files
 pdfmake/
