@@ -1,0 +1,59 @@
+/*******************************************************************************
+                                LOGO          
+*******************************************************************************/
+
+.logo {
+    grid-column: 2;
+    grid-row: 1;
+}
+
+.logo h2 {
+    font: 50px --gl-logo, sans-serif;
+}
+
+/*******************************************************************************
+                                BAR          
+*******************************************************************************/
+
+.bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    background: var(--gl-gradient);
+    padding: 2vw 0% 2vw 8vw;
+}
+
+/*******************************************************************************
+                                CONTENT          
+*******************************************************************************/
+
+.content {
+    grid-column: 2;
+    grid-row: 3;
+    margin: 0 8vw 0 8vw;
+    padding: 1vw 2vw 0 2vw;
+}
+
+.wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: var(--gl-transgrey);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.headline {
+    align-self: center;
+    font: 32px --gl-logo;
+    margin-top: 0%;
+}
+
+.teaser {
+    align-self: center;
+    font: 18px --gl-logo;
+}
+
+.text {
+    font: 18px --gl-block;
+    text-align: justify;
+}

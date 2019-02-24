@@ -60,35 +60,39 @@ def favicon():
 # FOOTER
 @app.route("/about")
 def about():
-    return f'<h2> GuideLight </h2> Footer zum Thema <i>about <br> <br> <a href="/index">back</a>'
-    # return send_from_directory("temp", "about.html")
+    return redirect(url_for("blog", topic="GuideLight"))
 
 
 # FOOTER
 @app.route("/api")
 def api():
-    return f'<h2> GuideLight </h2> Footer zum Thema <i>api <br> <br> <a href="/index">back</a>'
-    # return send_from_directory("temp", "api.html")
+    doc = mongo.db.website.find_one_or_404({"name": "api"}, {"_id": 0})
+    cnt = doc["content"]
+    return render_template("blog.html", content=cnt)
 
 
 # FOOTER
 @app.route("/privacy")
 def privacy():
-    return f'<h2> GuideLight </h2> Footer zum Thema <i>privacy <br> <br> <a href="/index">back</a>'
-    # return send_from_directory("temp", "privacy.html")
+    doc = mongo.db.website.find_one_or_404({"name": "privacy"}, {"_id": 0})
+    cnt = doc["content"]
+    return render_template("blog.html", content=cnt)
 
 
 # FOOTER
 @app.route("/impressum")
 def impressum():
-    return f'<h2> GuideLight </h2> Footer zum Thema <i>impressum <br> <br> <a href="/index">back</a>'
-    # return send_from_directory("temp", "impressum.html")
+    doc = mongo.db.website.find_one_or_404({"name": "impressum"}, {"_id": 0})
+    cnt = doc["content"]
+    return render_template("blog.html", content=cnt)
 
 
 # BLOG
 @app.route("/blog/<topic>")
 def blog(topic):
-    return f'<h2> GuideLight </h2> Blogeintrag zum Thema <i>{topic} <br> <br> <a href="/index">back</a>'
+    doc = mongo.db.website.find_one_or_404({"name": topic}, {"_id": 0})
+    cnt = doc["content"]
+    return render_template("blog.html", content=cnt)
 
 
 ################################################################################

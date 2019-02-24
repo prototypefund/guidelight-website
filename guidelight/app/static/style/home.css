@@ -103,7 +103,7 @@
     align-self: center;
     font: 18px --gl-block;
     overflow: hidden;
-    text-align: justify;
+    text-align: center;
     -webkit-line-clamp: 4;
     -webkit-box-orient: vertical;
     /* fallback */

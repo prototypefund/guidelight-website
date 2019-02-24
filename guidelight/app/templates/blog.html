@@ -1,0 +1,43 @@
+{#################################### BODY ####################################}
+{% extends "base.html" %}
+
+{% block style %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style/blog.css') }}">
+{% endblock %}
+
+{################################### HEADER ###################################}
+{% block header %}
+<a href="/" class="link">
+    <h2>GuideLight</h2>
+</a>
+{% endblock %}
+
+{##################################### BAR ####################################}
+{% block bar %}
+<div class="center text">
+    {{content.bar|safe}}
+</div>
+{% endblock %}
+
+{################################### CONTENT ##################################}
+{% block content %}
+<article class="wrap">
+    <h2 class="headline">{{content.title|safe}}</h2>
+    {% if content.teaser is defined %}
+    <p class="teaser">{{content.teaser|safe}}</p>
+    {% endif %}
+
+    {% for paragraph in content.paragraphs %}
+    {% if paragraph.image is defined %}
+    <img src="static/image/{{paragraph.image.src}}" alt={{paragraph.image.alt}} width="200" />
+    {% endif %}
+    {% if paragraph.teaser is defined %}
+    <p class="teaser">{{paragraph.teaser|safe}}</p>
+    {% endif %}
+    {% if paragraph.text is defined %}
+    <p class="text">{{paragraph.text|safe}}</p>
+    {% endif %}
+    {% endfor %}
+
+
+</article> {% endblock %}
