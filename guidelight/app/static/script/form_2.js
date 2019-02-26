@@ -218,6 +218,7 @@
 
         // create temp node to copy text from
         let letter = text.subject.join(" ") + "\n\n"
+        letter += text.ident.filter(function (str) { return str !== "" }).join(" ") + "\n\n"
         letter += text.body.join("\n\n");
 
         document.getElementById("letter-canvas").innerText = letter;
@@ -246,32 +247,22 @@
             let len = form.elements.length;
             for (let i = 0; i < len; i++) {
                 let field = form.elements[i];
-                // && field.type != 'file'
                 if (field.name && !field.disabled && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
 
                     if (field.type == 'select-multiple') {
                         let l = form.elements[i].options.length;
                         for (j = 0; j < l; j++) {
                             if (field.options[j].selected)
-                                // s[s.length] = {[field.name]: field.options[j].value };
                                 s[field.name] = field.options[j].value;
                         }
                     }
                     else if (field.type == "date") {
-                        // s[field.name] = formatDate(new Date(field.value));
                         s[field.name] = field.value;
                     }
                     else if (field.type == "file" && field.files[0]) {
-                        // let FR = new FileReader();
-                        // FR.addEventListener("load", function (e) {
-                        //     s[field.name] = e.target.result;
-                        //     console.log(e.target.result);
-                        // });
-                        // FR.readAsDataURL(field.files[0]);
                         s[field.name] = 'Siehe Anhang';
                     }
                     else if ((field.type != 'checkbox' && field.type != 'radio') || field.checked) {
-                        // s[s.length] = { [field.name]: field.value };
                         s[field.name] = field.value;
                     }
 
@@ -373,7 +364,7 @@
                     alignment: 'right'
                 },
                 subject: {
-                    margin: [0, 24, 0, 24],
+                    margin: [0, 24, 0, 0],
                     bold: true
                 },
                 text: {
@@ -398,8 +389,8 @@
 
         let d = { "from": [], "date": [], "to": [], "subject": [], "ident": [], "body": [], "canvas": "", "signature": [], "attachment": "" };
 
-        d.from.push(f.name, f.street, ((f.zip) + " " + (f.city || "Absender")));
-        d.date.push((f.place) + " " + styleDate((formatDate(f.date))));
+        d.from.push(f.name, f.street, ((f.zip) + " " + (f.city || "Absendeadresse")));
+        d.date.push((f.place) + " " + styleDate((formatDate(f.date))) + " " + f.name);
         if (entity.contact.hasOwnProperty('address')) {
             d.to.push(...entity.contact.address.formatted_address.split(/\s*;\s*/));
         } else {
@@ -407,7 +398,7 @@
         }
         d.subject.push(...c.subject.content);
 
-        d.ident.push(f["Kundennummer/Benutzername"] ? "Kundennummer: " + f["Kundennummer/Benutzername"] : "");
+        d.ident.push(f["Kundennummer/Benutzername"] ? "Nutzer*in/Kd Nr: " + f["Kundennummer/Benutzername"] : "");
         d.ident.push(f["Rechnungsnummer"] ? "Rechnungsnummer: " + f["Rechnungsnummer"] : "");
         d.ident.push(f["vorherige Anschrift"] ? "vorherige Anschrift: " + f["vorherige Anschrift"] : "");
         d.ident.push(f["Ausweiskopie"] ? "Ausweiskopie im Anhang" : "");
@@ -438,7 +429,7 @@
         d.signature.push((f.place || "Ort") + " " + (formatDate(f.date)), ...f.name);
 
         d.attachment = f.attachment || false;
-
+        console.log(d);
         return d;
     }
 

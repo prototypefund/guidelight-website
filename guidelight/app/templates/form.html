@@ -4,28 +4,29 @@
 {########################### GLOBALE MACROS ###########################}
 {% macro macro_user_textarea(type, name, label, value, placeholder="") -%}
 <div class="input-row">
-<textarea name="{{name}}" data-form="" data-validation="{{validation}}"
-    placeholder="{{placeholder}}" cols="40" rows="5"></textarea>
-<label for="{{name}}">{{label}}</label>
+    <textarea name="{{name}}" data-form="" data-validation="{{validation}}" placeholder="{{placeholder}}" cols="40"
+        rows="5"></textarea>
+    <label for="{{name}}">{{label}}</label>
 </div>
 {%- endmacro %}
 
 {% macro macro_user(type, name, label, value, placeholder="") -%}
 <div class="input-row">
-<input id="{{name}}" name="{{name}}" type="{{type}}" value="{{value}}" data-form="" data-validation="{{validation}}"
-    placeholder="{{placeholder}}">
-<label for="{{name}}">{{label}}</label>
+    <input id="{{name}}" name="{{name}}" type="{{type}}" value="{{value}}" data-form="" data-validation="{{validation}}"
+        placeholder="{{placeholder}}">
+    <label for="{{name}}">{{label}}</label>
 </div>
 {%- endmacro %}
 
 {% macro macro_user_nested(item) -%}
 <div class="input-row">
-<input id="{{item.name}}" name="{{item.name}}" type="{{item.input}}" value="{{item.value}}" data-form=""
-    data-validation="{{item.validation}}" placeholder="{{item.placeholder}}">
-<label for="{{item.name}}">{{item.label}}
-    <input id="{{item.content.name}}" name="{{item.content.name}}"  type="{{item.content.input}}" value="{{item.content.value}}" data-form=""
-        data-validation="{{item.content.validation}}" placeholder="{{item.content.placeholder}}">
-</label>
+    <input id="{{item.name}}" name="{{item.name}}" type="{{item.input}}" value="{{item.value}}" data-form=""
+        data-validation="{{item.validation}}" placeholder="{{item.placeholder}}">
+    <label for="{{item.name}}">{{item.label}}
+        <input id="{{item.content.name}}" name="{{item.content.name}}" type="{{item.content.input}}"
+            value="{{item.content.value}}" data-form="" data-validation="{{item.content.validation}}"
+            placeholder="{{item.content.placeholder}}">
+    </label>
 </div>
 {%- endmacro %}
 
@@ -35,33 +36,37 @@
     {# TODO: div to collapse inputs #}
     {% for i in mode %}
     <div class="input-row">
-    <input id="{{i.name}}" name="{{title}}" type="{{i.input}}" value="{{i.value}}" data-form="{{title}}"
-        placeholder="{{i.placeholder}}" data-validation="{{i.validation}}">
-    <label for="{{i.name}}">{{i.label}}
-        {%if dbkey == 'identity' %}
-        <details  style="margin: 0%">
-        <summary>Beispielbild</summary>
-        <img height="500" alt="Beispielbild geschwärzte Ausweiskopie"
-        src="{{url_for('static',filename='image/personalausweis_bsp.jpg')}}">
-        </details>
-        {% endif %}
-    </label>
+        <input id="{{i.name}}" name="{{title}}" type="{{i.input}}" value="{{i.value}}" data-form="{{title}}"
+            placeholder="{{i.placeholder}}" data-validation="{{i.validation}}">
+        <label for="{{i.name}}">{{i.label}}
+            {%if dbkey == 'identity' %}
+            <details style="margin: 0%">
+                <summary>Beispielbild</summary>
+                <img height="500" alt="Beispielbild geschwärzte Ausweiskopie"
+                    src="{{url_for('static',filename='image/personalausweis_bsp.jpg')}}">
+            </details>
+            {% endif %}
+        </label>
     </div>
     {% endfor %}
 </details>
 {%- endmacro %}
 
-{% macro macro_summary(id, name, text) -%}
-<div class="{{id}}">{% if id=="pdf" %}<fieldset id="export-curaddr" class="ident curaddr">
+{% macro macro_summary(id, name, text, warning) -%}
+    <div class="{{id}}">{% if id=="pdf" %}
+    {% if warning %}
+    <div class="warning">{{text}}</div>
+    {% endif %}
+    <fieldset id="export-curaddr" class="ident curaddr">
         <legend>Anschrift</legend>
-        <div>Hier kann noch deine Anschrift für den Brief ergänzt werden.</div>
+        <div class="warning">Hier kann noch deine Anschrift für den Brief ergänzt werden.</div>
         <input id="street2" name="street" type="text" value="" data-form="" placeholder="Straße" data-validation="">
         <label for="street">Straße und Hausnummer.</label>
         <input id="zip2" name="zip" type="text" value="" data-form="" placeholder="PLZ" data-validation="">
         <label for="zip">Postleitzahl.</label>
         <input id="city2" name="city" type="text" value="" data-form="" placeholder="Ort" data-validation="">
         <label for="city">Wohnort.</label>
-        </fieldset>{% endif %}
+    </fieldset>{% endif %}
     <button type="button" class="btn" id="{{id}}-btn" title="{{text}}">{{name}}</button>
 </div>
 {%- endmacro %}
@@ -116,12 +121,19 @@
         {% elif step.type == "user" %}
         <fieldset>
             <legend> Eingabe </legend>
+             {# CANVAS FOR SIGNATURE #}
+            {% if key == "signature" %}
+            <div id="signature-container">
+                <label for="signature-canvas">digitale Unterschrift</label>
+                <canvas id="signature-canvas" width="400" height="150"></canvas><br>
+                <button type="button" id="signature-clear" class="btn">neurer Versuch</button>
+                <script src="{{  url_for('static',filename='script/signature.js')  }}"></script>
+            </div>
+            {% endif %}
             {% for i in step.content %}
             {% if i.content %} {# catch nested inputs #}
             {{ macro_user_nested(i) }}
-            <br>
             {% else %}
-
             {% if i.input == "textarea" %}
             {{ macro_user_textarea(i.input, i.name, i.label, i.value, i.placeholder) }}
             {% else %}
@@ -130,15 +142,6 @@
 
             {% endif %}
             {% endfor %}
-            {# CANVAS FOR SIGNATURE #}
-            {% if key == "signature" %}
-            <div class="input-row">
-                <canvas id="signature-canvas" ></canvas>
-                <label for="signature-canvas">digitale Unterschrift</label>
-                <button type="button" id="signature-clear" class="btn">neurer Versuch</button>
-                <script src="{{  url_for('static',filename='script/signature.js')  }}"></script>
-            </div>
-            {% endif %}
         </fieldset>
         {########################### IF STEP IDENT ###########################}
         {% elif step.type == "ident" %}
@@ -154,30 +157,33 @@
         {########################## IF STEP SUMMARY ##########################}
         {# TODO: text generieren überarbeiten bzw. in DB packen #}
         {# TODO: check if there is mail or formatted address available #}
-        
+
         {% elif step.type == "summary" %}
-        <div class="export"> 
-        <div class="letter-container">
-        <div id="letter-canvas"></div>
-        {% set text = "Falls du lediglich den Text des Anschreibens in die Zwischenablage kopieren möchtes, kannst du das hier tuen."%}
-        {{ macro_summary("copy","in Zwischablage kopieren",text)}}
-        </div>
-        
-        <div class="export-container"> 
+        <div class="export">
+            <div class="letter-container">
+                <div id="letter-canvas"></div>
+                {% set text = "Falls du lediglich den Text des Anschreibens in die Zwischenablage kopieren möchtes, kannst du das hier tuen."%}
+                {{ macro_summary("copy","in Zwischablage kopieren",text)}}
+            </div>
 
-        {% if formatted_address in entity.contact.address %}
-        {% set text = "Wir haben die korrekte Adresse von " + entity.name + " hinzugefügt. Du kannst den Brief als PDF speichern und ausdrucken."%}
-        {{ macro_summary("pdf","PDF speichern",text)}}
-        {% else %}
-        {% set text = "Leider haben wir die korrekte Anschrift von " + entity.name + " derzeit nicht vorliegen. Du kannst den Brief trotzdem als PDF speichern und ausdrucken."%}
-        {{ macro_summary("pdf","als PDF speichern",text)}}
-        {% endif %}
+            <div class="export-container">
+                {% if "formatted_address" in entity.contact.address %}
+                {% set text = "Wir haben die korrekte Adresse von " + entity.name + " hinzugefügt. Du kannst den Brief als PDF speichern und ausdrucken." %}
+                 {{ macro_summary("pdf","als PDF speichern",text,False)}}
+                {% else %}
+                {% set text = "Leider haben wir die korrekte Anschrift von " + entity.name + " derzeit nicht vorliegen. Du kannst den Brief trotzdem als PDF speichern und ausdrucken." %}
+                 {{ macro_summary("pdf","als PDF speichern",text,True)}}
+                {% endif %}
+               
 
-        {# {% elif True %} #}
-        {% set text = "Die E-Mailadresse von" + entity.name + " wird automatisch ergänzt."%}
-        {{ macro_summary("mail","als Mail verschicken",text)}}
-
-        </div>
+                {% if "mail" in entity.contact %}
+                {% set text = "Die E-Mailadresse von" + entity.name + " wird automatisch ergänzt."%}
+                {{ macro_summary("mail","als Mail verschicken",text,False)}}
+                {% else %}
+                {% set text = "Leider haben wir die korrekte E-Mailadresse von " + entity.name + " derzeit nicht vorliegen. Du kannst trotzdem die Mail öffnen und die Adresse manuell ergänzen." %}
+                {{ macro_summary("pdf","als Mail verschicken",text,True)}}
+                {% endif %}
+            </div>
         </div>
         {% endif %}
 

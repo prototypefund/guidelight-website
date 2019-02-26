@@ -5,7 +5,7 @@
 .logo {
     grid-column: 2;
     grid-row: 1;
-    padding-top: 2vw;
+    /* padding-top: 2vw; */
 }
 
 .logo h2 {
@@ -141,7 +141,7 @@ details {
 }
 
 .input-row {
-    margin-bottom: 1em;
+    margin-bottom: .75em;
     display: grid;
     grid-gap: 10px;
     grid-template-columns: auto 1fr;
@@ -201,8 +201,13 @@ label::after {
     border-color: var(--gl-grey);
 }
 
+#signature-container {
+    float: right;
+}
+
 #signature-canvas {
-    margin: 5px 0px 5px 0px;
+    /* width: 400px; */
+    margin: 0px;
     border: 2px solid var(--gl-grey);
     border-radius: 5px;
     touch-action: none;
@@ -215,14 +220,18 @@ label::after {
     grid-template-columns: 2fr 3fr;
 }
 
+.export .mail {}
+
+export .pdf {}
+
 .export-container {
     grid-column: 2;
-    grid-row: 3;
+    /* grid-row: 3; */
 }
 
 .letter-container {
     grid-column: 1;
-    grid-row: 1 / 4;
+    grid-row: 1 / -1;
 }
 
 #letter-canvas {
@@ -238,4 +247,9 @@ label::after {
 
 #export-curaddr {
     display: none;
+}
+
+.warning {
+    font: 18px --gl-block;
+    color: var(--gl-warn);
 }
