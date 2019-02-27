@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI instance to serve GuideLight
+After=network.target
+
+[Service]
+User=guidelight
+Group=www-data
+WorkingDirectory=/home/guidelight/guidelight-website/guidelight
+Environment="PATH=/home/guidelight/guidelight-website/guidelight/env/bin"
+ExecStart=/home/guidelight/guidelight-website/guidelight/env/bin/uwsgi --ini guidelight.ini
+
+[Install]
+WantedBy=multi-user.target
