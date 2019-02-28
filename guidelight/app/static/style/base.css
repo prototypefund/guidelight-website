@@ -79,3 +79,26 @@ body {
     color: black;
     text-decoration: none;
 }
+
+/*******************************************************************************
+                     BETA BADGE 
+*******************************************************************************/
+
+body:after {
+    content: "ALPHA\Anot responsive";
+    white-space: pre;
+    position: fixed;
+    width: 150px;
+    height: 35px;
+    background: var(--gl-warn);
+    top: 20px;
+    left: -40px;
+    text-align: center;
+    font-size: 14px;
+    font-family: sans-serif;
+    color: var(--gl-grey);
+    line-height: 18px;
+    -ms-transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+}

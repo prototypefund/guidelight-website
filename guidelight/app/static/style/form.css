@@ -184,6 +184,7 @@ label::after {
 
 .btn {
     font: 18px --gl-block;
+    margin: 2px;
     padding: 8px;
     border: 2px solid var(--gl-mutemint);
     border-radius: 5px;
@@ -202,12 +203,12 @@ label::after {
 }
 
 #signature-container {
-    float: right;
+    float: left;
 }
 
 #signature-canvas {
     /* width: 400px; */
-    margin: 0px;
+    margin-right: 2px;
     border: 2px solid var(--gl-grey);
     border-radius: 5px;
     touch-action: none;

@@ -124,9 +124,9 @@
              {# CANVAS FOR SIGNATURE #}
             {% if key == "signature" %}
             <div id="signature-container">
-                <label for="signature-canvas">digitale Unterschrift</label>
                 <canvas id="signature-canvas" width="400" height="150"></canvas><br>
                 <button type="button" id="signature-clear" class="btn">neurer Versuch</button>
+                <label for="signature-canvas">digitale Unterschrift</label>
                 <script src="{{  url_for('static',filename='script/signature.js')  }}"></script>
             </div>
             {% endif %}
