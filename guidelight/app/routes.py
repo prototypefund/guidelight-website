@@ -54,7 +54,7 @@ def form(short, action):
 # FAVICON
 @app.route("/favicon.ico")
 def favicon():
-    return send_from_directory("static/FAVICON/", "favicon.png", mimetype="image/png")
+    return send_from_directory("static/favicon/", "favicon.png", mimetype="image/png")
 
 
 # FOOTER
