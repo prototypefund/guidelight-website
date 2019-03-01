@@ -151,13 +151,13 @@
         let formData = serializeArray(document.querySelector("form"));
         let content = entity.action.content
         // console.log(formData);
-        if ((!formData.city || !formData.zip || !formData.street) &&
-            !(addrContainer.style.display == "block")) {
-            document.getElementById("export-curaddr").style.display = "block";
+        if ((formData.city == undefined || formData.zip == undefined ||
+            formData.street == undefined) && addrContainer.style.display != "block") {
+            addrContainer.style.display = "block";
         } else {
             // TODO: make less ugly and universal for all attachments
             if (formData["Ausweiskopie"]) {
-                let field = document.querySelector('input[name="Ausweiskopie"]')
+                // let field = document.querySelector('input[name="Ausweiskopie"]')
                 let FR = new FileReader();
                 FR.addEventListener("load", function (e) {
                     // check if uploaded file is a picture
@@ -167,7 +167,8 @@
                     }
                     exportPDF(preRender(formData, content), content.name);
                 });
-                FR.readAsDataURL(field.files[0]);
+                // TODO: TEMPORARY BUGFIX
+                FR.readAsDataURL(formData["Ausweiskopie"].ident);
             } else {
                 exportPDF(preRender(formData, content), content.name);
             }
@@ -183,10 +184,18 @@
     function sendMail() {
         let formData = serializeArray(document.querySelector("form"));
         let content = entity.action.content
-        let text = preRender(formData, content); let addr = entity.contact.mail;
+        let text = preRender(formData, content);
 
+        let addr = entity.contact.mail;
         let sub = text.subject;
-        let body = encodeURIComponent(text.body.join("\n"));
+
+        let letter = text.body.join("\n");
+        letter += "\n" + (formData.name || "") + "\n\n";
+        letter += "\n" + text.ident.filter(function (str) {
+            return str !== ""
+        }).join("\n")
+        let body = encodeURIComponent(letter); //text.body.join("\n")
+
         window.location.href = `mailto:${addr}?subject=${sub}&body=${body}`
         // window.open(`mailto:${addr}?subject=${sub}&body=${body}`);
 
@@ -198,9 +207,11 @@
         let content = entity.action.content
         let text = preRender(formData, content);
 
-        // create temp node to copy text from
         let letter = text.subject.join(" ") + "\n\n"
-        letter += text.body.join("\n");
+        letter += text.ident.filter(function (str) { return str !== "" }).join("\n") + "\n\n"
+        letter += text.body.join("\n\n");
+        letter += "\n" + text.signature;
+
         let el = document.createElement("textarea");
         el.value = letter;
         document.body.appendChild(el);
@@ -216,10 +227,10 @@
         let content = entity.action.content
         let text = preRender(formData, content);
 
-        // create temp node to copy text from
         let letter = text.subject.join(" ") + "\n\n"
-        letter += text.ident.filter(function (str) { return str !== "" }).join(" ") + "\n\n"
+        letter += text.ident.filter(function (str) { return str !== "" }).join("\n") + "\n\n"
         letter += text.body.join("\n\n");
+        letter += "\n" + text.signature;
 
         document.getElementById("letter-canvas").innerText = letter;
     }
@@ -240,13 +251,14 @@
         }, defaultTimeout);
     }
 
-    // https://plainjs.com/javascript/ajax/serialize-form-data-into-an-array-46/
+    // TODO: fix this mess
     function serializeArray(form) {
         let s = [];
         if (typeof form == 'object' && form.nodeName == "FORM") {
             let len = form.elements.length;
             for (let i = 0; i < len; i++) {
                 let field = form.elements[i];
+                // console.log(field);
                 if (field.name && !field.disabled && field.type != 'reset' && field.type != 'submit' && field.type != 'button') {
 
                     if (field.type == 'select-multiple') {
@@ -261,15 +273,25 @@
                     }
                     else if (field.type == "file" && field.files[0]) {
                         s[field.name] = 'Siehe Anhang';
+                        if (field.dataset.form) {
+                            let identname = field.dataset.form
+                            if (!s[identname]) s[identname] = {}
+                            s[identname][field.name] = field.files[0];
+                        }
                     }
-                    else if ((field.type != 'checkbox' && field.type != 'radio') || field.checked) {
+                    else if ((field.type != 'checkbox' && field.type != 'radio' && field.value != "") || field.checked) {
                         s[field.name] = field.value;
+                        if (field.dataset.form) {
+                            let identname = field.dataset.form
+                            if (!s[identname]) s[identname] = {}
+                            s[identname][field.name] = field.value;
+                        }
                     }
 
                 }
             }
         }
-        console.log(s);
+        // console.log(s);
         return s;
     }
 
@@ -329,7 +351,7 @@
                 },
                 {
                     stack: doc.ident,
-                    style: 'subject'
+                    style: 'text'
                 },
                 {
                     stack: addStyle(doc.body, 'paragraph'),
@@ -353,7 +375,7 @@
                         ]
                 },
                 {
-                    text: doc.date
+                    text: doc.signature
                 },
             ],
             styles: {
@@ -389,8 +411,8 @@
 
         let d = { "from": [], "date": [], "to": [], "subject": [], "ident": [], "body": [], "canvas": "", "signature": [], "attachment": "" };
 
-        d.from.push(f.name, f.street, ((f.zip) + " " + (f.city || "Absendeadresse")));
-        d.date.push((f.place) + " " + styleDate((formatDate(f.date))) + " " + f.name);
+        d.from.push(f.name || "", f.street || "", ((f.zip || "") + " " + (f.city || "Absendeadresse")));
+        d.date.push((f.place || "") + " " + styleDate((formatDate(f.date))) + " " + f.name || "");
         if (entity.contact.hasOwnProperty('address')) {
             d.to.push(...entity.contact.address.formatted_address.split(/\s*;\s*/));
         } else {
@@ -398,10 +420,25 @@
         }
         d.subject.push(...c.subject.content);
 
-        d.ident.push(f["Kundennummer/Benutzername"] ? "Nutzer*in/Kd Nr: " + f["Kundennummer/Benutzername"] : "");
-        d.ident.push(f["Rechnungsnummer"] ? "Rechnungsnummer: " + f["Rechnungsnummer"] : "");
-        d.ident.push(f["vorherige Anschrift"] ? "vorherige Anschrift: " + f["vorherige Anschrift"] : "");
+        // TODO: TEMPORARY BUGFIX
+        d.ident.push(f["Kundennummer/Benutzername"] ? "Nutzer*in/Kd Nr: " + f["Kundennummer/Benutzername"].ident : "");
+        d.ident.push(f["Rechnungsnummer"] ? "Rechnungsnummer: " + f["Rechnungsnummer"].ident : "");
         d.ident.push(f["Ausweiskopie"] ? "Ausweiskopie im Anhang" : "");
+        if (f["vorherige Anschrift"]) {
+            let addr = "";
+            for (let key in f["vorherige Anschrift"]) {
+                addr += f["vorherige Anschrift"][key] + " ";
+            }
+            d.ident.push("vorherige Anschrift:", addr);
+        }
+        if (f["Anschrift"]) {
+            let addr = "Anschrift: ";
+            for (let key in f["Anschrift"]) {
+                addr += f["Anschrift"][key] + " ";
+            }
+            d.ident.push(addr);
+        }
+
 
         c.letter.forEach(key => {
             let type = c[key].type;
@@ -426,10 +463,10 @@
 
         // signature input with mouse
         d.canvas = document.getElementById('signature-canvas').toDataURL("image/png");
-        d.signature.push((f.place || "Ort") + " " + (formatDate(f.date)), ...f.name);
+        d.signature.push((f.name || "") + " " + styleDate(formatDate(f.date)) + " " + (f.place || ""));
 
         d.attachment = f.attachment || false;
-        console.log(d);
+        // console.log(d);
         return d;
     }
 

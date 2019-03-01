@@ -22,7 +22,7 @@ segoeui*
 texte/
 
 # PDFmake Files
-pdfmake/
+# pdfmake/
 
 # Windows
 .DS_Store

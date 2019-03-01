@@ -33,10 +33,9 @@
 {% macro macro_ident(mode=[], title="", dbkey="") -%}
 <details class="ident {{dbkey}}">
     <summary>{{title}}</summary>
-    {# TODO: div to collapse inputs #}
     {% for i in mode %}
     <div class="input-row">
-        <input id="{{i.name}}" name="{{title}}" type="{{i.input}}" value="{{i.value}}" data-form="{{title}}"
+        <input id="{{i.name}}" name="{{i.name}}" type="{{i.input}}" value="{{i.value}}" data-form="{{title}}"
             placeholder="{{i.placeholder}}" data-validation="{{i.validation}}">
         <label for="{{i.name}}">{{i.label}}
             {%if dbkey == 'identity' %}
@@ -53,7 +52,7 @@
 {%- endmacro %}
 
 {% macro macro_summary(id, name, text, warning) -%}
-    <div class="{{id}}">{% if id=="pdf" %}
+<div class="{{id}}">{% if id=="pdf" %}
     {% if warning %}
     <div class="warning">{{text}}</div>
     {% endif %}
@@ -121,7 +120,7 @@
         {% elif step.type == "user" %}
         <fieldset>
             <legend> Eingabe </legend>
-             {# CANVAS FOR SIGNATURE #}
+            {# CANVAS FOR SIGNATURE #}
             {% if key == "signature" %}
             <div id="signature-container">
                 <canvas id="signature-canvas" width="400" height="150"></canvas><br>
@@ -169,12 +168,12 @@
             <div class="export-container">
                 {% if "formatted_address" in entity.contact.address %}
                 {% set text = "Wir haben die korrekte Adresse von " + entity.name + " hinzugefügt. Du kannst den Brief als PDF speichern und ausdrucken." %}
-                 {{ macro_summary("pdf","als PDF speichern",text,False)}}
+                {{ macro_summary("pdf","als PDF speichern",text,False)}}
                 {% else %}
                 {% set text = "Leider haben wir die korrekte Anschrift von " + entity.name + " derzeit nicht vorliegen. Du kannst den Brief trotzdem als PDF speichern und ausdrucken." %}
-                 {{ macro_summary("pdf","als PDF speichern",text,True)}}
+                {{ macro_summary("pdf","als PDF speichern",text,True)}}
                 {% endif %}
-               
+
 
                 {% if "mail" in entity.contact %}
                 {% set text = "Die E-Mailadresse von" + entity.name + " wird automatisch ergänzt."%}
