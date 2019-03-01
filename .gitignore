@@ -9,7 +9,7 @@ instance/
 .coverage
 htmlcov/
 dist/
-build/
+# build/
 *.egg-info/
 
 # Exclude Fonts from Git because of License
